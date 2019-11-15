@@ -6,7 +6,6 @@
 --
 -- Normally, you'd only override those defaults you care about.
 --
--- import Control.Monad (liftM)
 import XMonad
 import XMonad.Util.SpawnOnce
 import Data.Monoid
@@ -15,8 +14,8 @@ import XMonad.Actions.OnScreen
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
+import Graphics.X11.ExtraTypes.XF86   -- KBD Key names
 
-xK_HomePage = 0x1008ff18
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
@@ -167,11 +166,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 {- | Switch to last two workspacers as a pair -}
     ++
     [
-     ((modm , xK_a ), view2 "SpareB" "SpareC")
---    ,("<XF86HomePage>", view2 "Admin" "Home")
---    ,((modm , xK_b ), view2 "Admin" "Home")
-     ,((0 , xK_HomePage ), view2 "Admin" "Home")
-    
+     ((modm, xK_a            ), view2 "SpareB" "SpareC")
+    ,((0   , xF86XK_HomePage ), view2 "Admin" "Home")
+    ,((0   , xF86XK_Search   ), view2 "PIM" "A/V")
     ]
 
 
