@@ -4,3 +4,4 @@ xmonad.errors
 *.hi
 *.o
 xmonad.state
+*.out
