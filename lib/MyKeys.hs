@@ -134,7 +134,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ]
 
 
-{- | Switch to last two workspacers as a pair -}
+{- | View  the last two workspacers as a pair -}
     ++
     [
      ((modm, xK_a            ), view2 "SpareB" "SpareC")
@@ -150,3 +150,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ,((0   , xF86XK_AudioMute ), volToggle)
     ]
 
+{- | Swap ltor visible workspaces -}
+
+  ++
+  [
+    ( (modm , xK_F5), swapCurrentViews)
+  ]

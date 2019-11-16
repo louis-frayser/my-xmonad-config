@@ -10,4 +10,6 @@ check:
 clean:
 	@for x in ${BAK} *.out ${OBJS} ; \
 	   do if [ -e $$x ] ; then rm -v  $$x ; fi; done
-	
+	   
+wc:
+	find . -name "*.hs" -o -name "Makefile" | xargs wc -l
