@@ -42,12 +42,6 @@ myBorderWidth   = 1
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
-{-
-myExtraWorkspaces = [(xK_0, "SpareA"),(xK_minus, "SpareB"),(xK_equal, "SpareC")]
-myWorkspaces    = ["Admin","Home","PIM","Practice","Research","Project","Graphics","A/V","Scratch"]
-  ++ (map snd myExtraWorkspaces)
--}
-
 -- Border colors for unfocused and focused windows, respectively.
 --
 myNormalBorderColor  = "#c0c0b0"
@@ -151,7 +145,7 @@ myLogHook = return ()
 -- myStartupHook = return ()
 -- Original was spawnOnce
 myStartupHook :: X ()
-myStartupHook = snd (spawn::String -> X (),spawnOnce) $ "/export/home/frayser/.xmonad/spawnOnce.sh"
+myStartupHook = fst (spawn::String -> X (),spawnOnce) $ "/export/home/frayser/.xmonad/scripts/sanity-check.sh"
 
 
 ------------------------------------------------------------------------
