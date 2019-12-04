@@ -12,4 +12,7 @@ clean:
 	   do if [ -e $$x ] ; then rm -v  $$x ; fi; done
 	   
 wc:
-	find . -name "*.hs" -o -name "Makefile" | xargs wc -l
+	@find . -name "*.hs" -o -name "Makefile" | xargs wc -l
+
+clobber: clean
+	@find . -name "*.swp" -exec rm -v "{}" \;
