@@ -10,14 +10,18 @@ where
 --
 import XMonad
 import XMonad.Util.SpawnOnce
--- import Data.Monoid
+-- import XMonad.Util.Run(runProcessWithInput,runProcessWithInputAndWait)
+
 import System.Exit
+
+import System.Process(runInteractiveCommand,waitForProcess)
 import XMonad.Actions.OnScreen
 -- 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import Graphics.X11.ExtraTypes.XF86   -- KBD Key names
 import MyViews
+
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
 --
@@ -28,6 +32,11 @@ myModMask       = mod1Mask
 xspawn :: String -> X ()
 xspawn cmd =spawn ("PATH=/usr/lucho/bin:$PATH;" ++ cmd)
 
+screenshot::  X()
+screenshot=spawn "sleep 1; /usr/bin/mate-screenshot -a"
+
+
+-- | Multimedia 
 volDn = spawn "amixer -D pulse sset Master,0 2000- unmute"
 volUp = spawn "amixer -D pulse sset Master,0 2000+ unmute"
 volToggle = spawn "amixer -D pulse sset Master,0 toggle"
@@ -134,12 +143,20 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ]
 
 
-{- | View  the last two workspacers as a pair -}
+{- | View  two workspacers as a pair -}
     ++
     [
-     ((modm, xK_a            ), view2 "SpareB" "SpareC")
-    ,((0   , xF86XK_HomePage ), view2 "Admin" "Home")
-    ,((0   , xF86XK_Search   ), view2 "PIM" "A/V")
+     ((modm,  xK_a            ), view2 "SpareB" "SpareC")
+    ,((0    , xF86XK_HomePage ), view2 "Admin"  "Admin+") 
+    ,((modm , xK_F1),            view2 "Admin"  "Admin+")
+    ,((0    , xF86XK_Search   ), view2 "PIM"    "A/V")
+    ,((modm , xK_F3           ), view2 "PIM"    "A/V")
+    ,((0    , xF86XK_Calculator),view2 "Project" "Research")
+    ,((modm , xK_F12),           view2 "Project" "Research")
+    ,((0    , xF86XK_Mail),      view2 "Home" "PIM")
+    ,((modm , xK_F2),            view2 "Home" "PIM")
+    ,((0    , xF86XK_Tools),     view2 "Practice" "Project+")
+    ,((modm , xK_F4),            view2 "Practice" "Project+")
     ]
 
 {- | Multimedia Keys -}
@@ -156,3 +173,14 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
   [
     ( (modm , xK_F5), swapCurrentViews)
   ]
+
+-- | Run Program
+    ++
+    [
+      ( (0, xK_Print), screenshot)
+    , ( (modm, xK_slash), helpCommand)
+    , ( (modm, xK_question), helpCommand)
+--  , ( (modm, xK_Home), screenshot)
+    ]
+
+-- vim: set expandtab tabstop=4 shiftwidth=4 ai:

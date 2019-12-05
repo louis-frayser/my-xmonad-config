@@ -1,11 +1,17 @@
 module MyViews (myWorkspaces,myExtraWorkspaces,swapCurrentViews,
-  view2)
+  view2,helpCommand)
 {- | View & View-controller definitions that must be shared between xmonad and config modules
  -}
 where
 --
--- Part of xmonad config file.
+-- Part of a modular xmonad configuration.
 --
+
+import Data.List(intercalate)
+import System.IO(IOMode(ReadMode),hGetLine,hGetContents,hWaitForInput,withFile,hPutStrLn,stderr)
+import Prelude hiding (putStrLn)
+import Control.Exception(catch)
+import Control.Concurrent(threadDelay)
 import XMonad
 import XMonad.Actions.OnScreen
 -- 
@@ -23,7 +29,15 @@ import Data.Maybe
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
-myExtraWorkspaces = [(xK_0, "SpareA"),(xK_minus, "SpareB"),(xK_equal, "SpareC")]
+myExtraWorkspaces = [(xK_0, "SpareA"),(xK_minus, "SpareB"),(xK_equal, "SpareC")] 
+  ++
+    [
+      (xK_x,"Admin+") -- , (xK_KP_1,"Admin+") keypad codes don't work
+    , (xK_y,"Project+")
+    , (xK_z,"A/V+")
+    ]
+
+
 myWorkspaces    = ["Admin","Home","PIM","Practice","Research","Project","Graphics","A/V","Scratch"]
   ++ (map snd myExtraWorkspaces)
 
@@ -37,9 +51,9 @@ view2 lft rht =
 -- screenToWorkspaceId :: W.Screen (W.Workspace i j k) k2 d -> WorkspaceId
 screenToWorkspaceId (W.Screen (W.Workspace wsId _ _) _sid _ ) = wsId
 
--- | Switch what's viewed on 1st and 2nd screens
--- Get focusted and and unfocused screen
--- Focus the unfocused on
+-- | Switch what's viewed on 1st and 2nd screens:
+-- Get a focusted and an unfocused screen
+-- The shift focus to the unfocused on
 swapCurrentViews :: X ()
 swapCurrentViews =
   withWindowSet
@@ -54,3 +68,66 @@ swapCurrentViews =
               
 
      
+putStrLn = hPutStrLn stderr
+-- | Help
+helpCommand :: X ()
+helpCommand =  
+   do -- verified pwd = $HOME
+      -- for some reason return () doesn't
+      -- If we don't delay until fifo is created
+      -- the shell will create a regular file named "fifo"
+      make_fifo >> (io $ threadDelay 1000000)
+      -- menu_to_fifo: "xmesage>>fifo" blocks unless it runs
+      --  after fifo is read from.
+      menu_to_fifo
+      result <- io get_result
+      io $ putStrLn $ "xmonad: Switching view to `" ++ result ++ "'"
+      windows $ W.greedyView result
+   where
+      fifodir=".xmonad/run"
+      fifo=fifodir ++ "/fifo"
+      make_fifo=
+       spawn $ "fifodir="++fifodir ++"; fifo="++fifo++";\
+               \[  -e $fifo ] || { \
+               \[ -e $fifodir ] || mkdir -p $fifodir;\
+               \mkfifo $fifo ;}"
+      menu_to_fifo :: X ()
+      menu_to_fifo = 
+        do let buttons=intercalate "," myWorkspaces
+           let help = "/export/home/frayser/.xmonad/doc/xmonad.cat"
+           spawn $ ".xmonad/scripts/wsmenu-to-pipe.sh " ++
+             buttons
+      
+
+      -- Waits to find a result to return
+      get_result = withFile fifo ReadMode read_when_ready
+        where read_when_ready = getIt
+
+-- | Read result from menu of workspaces
+--  waitval is (-1) because a real value crashes 
+getIt h = do catch tryit  tryit_again
+              where tryit =
+                      do putStrLn "getIt..."
+                         ready <- hWaitForInput h (-1)
+                         if ready then put_result
+                                   else putStrLn " WTF" >> return ""
+                    tryit_again e =
+                      do putStrLn $ "E :-" ++ show (e ::IOError)
+                         putStrLn "Waiting for input..."
+                         threadDelay delayusecs
+                         getIt h
+                    put_result =  do result <- hGetLine h
+                                     putStrLn $ "xmonad: RESULT: `" ++ result ++ "'."
+                                     return result
+                    delayusecs=round $ delaysecs * 1e6
+                    delaysecs=1
+help:: String
+help = unlines [ 
+      "The default modifier key is '" ++ "L_ALT" ++ "'." 
+   , "Default keybindings:"
+   , "" 
+   , "-- launching and killing progarms"
+   , "mod-Shift-Enter Launch terminal"
+   ]
+       
+-- vim: set expandtab tabstop=4 shiftwidth=4 ai:
