@@ -13,7 +13,7 @@ import XMonad.Util.SpawnOnce
 -- import XMonad.Util.Run(runProcessWithInput,runProcessWithInputAndWait)
 
 import System.Exit
-
+import System.IO (stderr, hPutStrLn)
 import System.Process(runInteractiveCommand,waitForProcess)
 import XMonad.Actions.OnScreen
 -- 
@@ -173,14 +173,26 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
   [
     ( (modm , xK_F5), swapCurrentViews)
   ]
-
+  -- 
 -- | Run Program
     ++
     [
       ( (0, xK_Print), screenshot)
-    , ( (modm, xK_slash), helpCommand)
-    , ( (modm, xK_question), helpCommand)
+    , ( (modm, xK_slash),      helpWsCommand)
+    , ( (modm .|. shiftMask, xK_slash), helpCommand)
+--    , ( (modm, xK_question), helpCommand)
+
+{- Note colon is registered as shift-semicolon
+    , ( (modm .|. shiftMask, xK_semicolon), showkey "sft-semicolon")
+    , ( (modm, xK_colon),          showkey "colon")
+
+    , ( (modm, xK_semicolon), showkey "semicolon")
+
+    
 --  , ( (modm, xK_Home), screenshot)
+-}
     ]
 
+showkey :: String -> X ()
+showkey k = io $ System.IO.hPutStrLn stderr $  "KEY: " ++  k
 -- vim: set expandtab tabstop=4 shiftwidth=4 ai:

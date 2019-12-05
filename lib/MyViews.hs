@@ -1,5 +1,5 @@
 module MyViews (myWorkspaces,myExtraWorkspaces,swapCurrentViews,
-  view2,helpCommand)
+  view2,helpCommand,helpWsCommand)
 {- | View & View-controller definitions that must be shared between xmonad and config modules
  -}
 where
@@ -8,7 +8,9 @@ where
 --
 
 import Data.List(intercalate)
-import System.IO(IOMode(ReadMode),hGetLine,hGetContents,hWaitForInput,withFile,hPutStrLn,stderr)
+import System.IO(IOMode(ReadMode),hGetLine,hGetContents,
+                  hWaitForInput,withFile,hPutStrLn,stderr)
+import System.Directory(doesFileExist)
 import Prelude hiding (putStrLn)
 import Control.Exception(catch)
 import Control.Concurrent(threadDelay)
@@ -20,6 +22,8 @@ import qualified Data.Map        as M
 --
 import Graphics.X11.ExtraTypes.XF86   -- KBD Key names
 import Data.Maybe
+-- import Debug.Trace
+
 -- The default number of workspaces (virtual screens) and their names.
 -- By default we use numeric strings, but any string may be used as a
 -- workspace name. The number of workspaces is determined by the length
@@ -66,61 +70,65 @@ swapCurrentViews =
                  _ -> view2 wc_id wx_id
                )
               
-
-     
-putStrLn = hPutStrLn stderr
 -- | Help
-helpCommand :: X ()
-helpCommand =  
+helpWsCommand :: X ()
+helpWsCommand =  
    do -- verified pwd = $HOME
-      -- for some reason return () doesn't
       -- If we don't delay until fifo is created
       -- the shell will create a regular file named "fifo"
-      make_fifo >> (io $ threadDelay 1000000)
+      make_fifo
       -- menu_to_fifo: "xmesage>>fifo" blocks unless it runs
       --  after fifo is read from.
       menu_to_fifo
       result <- io get_result
-      io $ putStrLn $ "xmonad: Switching view to `" ++ result ++ "'"
+      trace $ "xmonad: Switching view to `" ++ result ++ "'"
       windows $ W.greedyView result
    where
       fifodir=".xmonad/run"
       fifo=fifodir ++ "/fifo"
       make_fifo=
-       spawn $ "fifodir="++fifodir ++"; fifo="++fifo++";\
+        do already <- io $ doesFileExist fifo
+           if already then return ()
+                         else do _mkfifo
+                                 io $ threadDelay 1000000
+      _mkfifo =                            
+         spawn $ "fifodir="++fifodir ++"; fifo="++fifo++";\
                \[  -e $fifo ] || { \
                \[ -e $fifodir ] || mkdir -p $fifodir;\
                \mkfifo $fifo ;}"
       menu_to_fifo :: X ()
       menu_to_fifo = 
-        do let buttons=intercalate "," myWorkspaces
-           let help = "/export/home/frayser/.xmonad/doc/xmonad.cat"
-           spawn $ ".xmonad/scripts/wsmenu-to-pipe.sh " ++
-             buttons
-      
+           do let dmbuttons=unlines myWorkspaces
+              spawn $ "echo '" ++ dmbuttons ++ "'| dmenu > " ++ fifo
+      -- Polls fifo for a result
+      get_result = withFile fifo ReadMode getIt
 
-      -- Waits to find a result to return
-      get_result = withFile fifo ReadMode read_when_ready
-        where read_when_ready = getIt
-
+     
 -- | Read result from menu of workspaces
 --  waitval is (-1) because a real value crashes 
-getIt h = do catch tryit  tryit_again
-              where tryit =
-                      do putStrLn "getIt..."
-                         ready <- hWaitForInput h (-1)
-                         if ready then put_result
-                                   else putStrLn " WTF" >> return ""
-                    tryit_again e =
-                      do putStrLn $ "E :-" ++ show (e ::IOError)
-                         putStrLn "Waiting for input..."
-                         threadDelay delayusecs
-                         getIt h
-                    put_result =  do result <- hGetLine h
-                                     putStrLn $ "xmonad: RESULT: `" ++ result ++ "'."
-                                     return result
-                    delayusecs=round $ delaysecs * 1e6
-                    delaysecs=1
+getIt h =
+  do catch tryit  tryit_again
+       where tryit =
+               do trace "getIt..."
+                  ready <- hWaitForInput h (-1)
+                  if ready then put_result
+                     else trace "xmonad: WTF" >> return ""
+             tryit_again e =
+               do hPutStrLn stderr $ "E :-" ++ show (e ::IOError)
+                  trace "xmonad: Waiting for input..."
+                  threadDelay delayusecs
+                  getIt h
+             put_result =  do result <- hGetLine h
+                              trace $ "xmonad: RESULT: `" ++ result ++ "'."
+                              return result
+             delayusecs=round $ delaysecs * 1e6
+             delaysecs=0.5
+
+
+helpfile = "/export/home/frayser/.xmonad/doc/xmonad.cat"
+helpCommand :: X ()
+helpCommand = spawn $ "xmessage -file " ++ helpfile 
+{-
 help:: String
 help = unlines [ 
       "The default modifier key is '" ++ "L_ALT" ++ "'." 
@@ -129,5 +137,5 @@ help = unlines [
    , "-- launching and killing progarms"
    , "mod-Shift-Enter Launch terminal"
    ]
-       
+-}       
 -- vim: set expandtab tabstop=4 shiftwidth=4 ai:
