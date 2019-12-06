@@ -146,7 +146,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 {- | View  two workspacers as a pair -}
     ++
     [
-     ((modm,  xK_a            ), view2 "SpareB" "SpareC")
+     ((modm,  xK_a            ), view2 "A/V+" "Graphics+")
     ,((0    , xF86XK_HomePage ), view2 "Admin"  "Admin+") 
     ,((modm , xK_F1),            view2 "Admin"  "Admin+")
     ,((0    , xF86XK_Search   ), view2 "PIM"    "A/V")
@@ -155,8 +155,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ,((modm , xK_F12),           view2 "Project" "Research")
     ,((0    , xF86XK_Mail),      view2 "Home" "PIM")
     ,((modm , xK_F2),            view2 "Home" "PIM")
-    ,((0    , xF86XK_Tools),     view2 "Practice" "Project+")
-    ,((modm , xK_F4),            view2 "Practice" "Project+")
+    ,((0    , xF86XK_Tools),     view2 "Practice" "Project")
+    ,((modm , xK_F4),            view2 "Practice" "Project")
     ]
 
 {- | Multimedia Keys -}

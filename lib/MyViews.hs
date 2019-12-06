@@ -1,6 +1,6 @@
 module MyViews (myWorkspaces,myExtraWorkspaces,swapCurrentViews,
   view2,helpCommand,helpWsCommand)
-{- | View & View-controller definitions that must be shared between xmonad and config modules
+{- | View & view-controller definitions that must be shared between xmonad and config modules
  -}
 where
 --
@@ -33,13 +33,14 @@ import Data.Maybe
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
-myExtraWorkspaces = [(xK_0, "SpareA"),(xK_minus, "SpareB"),(xK_equal, "SpareC")] 
-  ++
-    [
-      (xK_x,"Admin+") -- , (xK_KP_1,"Admin+") keypad codes don't work
-    , (xK_y,"Project+")
-    , (xK_z,"A/V+")
-    ]
+myExtraWorkspaces =
+  [(xK_0, "Research+")
+  ,(xK_minus, "A/V+")
+  ,(xK_equal, "Graphics+")
+  ,(xK_x,"Admin+") -- , (xK_KP_1,"Admin+") keypad codes don't work
+  ,(xK_y,"Project+")
+  ,(xK_z,"Practice+")
+  ]
 
 
 myWorkspaces    = ["Admin","Home","PIM","Practice","Research","Project","Graphics","A/V","Scratch"]
@@ -128,14 +129,5 @@ getIt h =
 helpfile = "/export/home/frayser/.xmonad/doc/xmonad.cat"
 helpCommand :: X ()
 helpCommand = spawn $ "xmessage -file " ++ helpfile 
-{-
-help:: String
-help = unlines [ 
-      "The default modifier key is '" ++ "L_ALT" ++ "'." 
-   , "Default keybindings:"
-   , "" 
-   , "-- launching and killing progarms"
-   , "mod-Shift-Enter Launch terminal"
-   ]
--}       
+--
 -- vim: set expandtab tabstop=4 shiftwidth=4 ai:
