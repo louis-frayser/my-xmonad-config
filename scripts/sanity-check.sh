@@ -4,4 +4,5 @@ XMHOME=$HOME/.xmonad
 PIDFILE=$XMHOME/run/xmonad.pid
 [ -e $PIDFILE ] && read pid < $PIDFILE
 echo $PPID > $PIDFILE
+xhost local:
 [ "$pid" = $PPID ] || exec $XMHOME/scripts/spawnOnce.sh
