@@ -1,5 +1,5 @@
 OBJS=*.o lib/*.o *.hi lib/*.hi
-BAK=*~ lib/*~
+BAK=*~ */*~
 all: check
 
 check:
