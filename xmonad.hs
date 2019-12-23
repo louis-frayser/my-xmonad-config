@@ -14,6 +14,10 @@ import XMonad.Actions.OnScreen
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
+import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.ManageDocks
+import XMonad.Layout.Reflect
+
 import Graphics.X11.ExtraTypes.XF86   -- KBD Key names
 import MyViews (myWorkspaces)
 import MyKeys (myKeys, myModMask)
@@ -80,7 +84,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = tiled ||| Mirror tiled ||| Full
+myLayout = avoidStruts (tall ||| Mirror tall ||| tiled ||| Mirror tiled ||| Full)
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
@@ -93,6 +97,7 @@ myLayout = tiled ||| Mirror tiled ||| Full
 
      -- Percent of screen to increment by when resizing panes
      delta   = 3/100
+     tall    = Tall 1 (3/100) (1/2)
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -154,10 +159,7 @@ myStartupHook = fst (spawn::String -> X (),spawnOnce) $ "/export/home/frayser/.x
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 -- main = xmonad defaults
-main = do
- xmonad $ defaults {
-           workspaces = myWorkspaces
-        } 
+main = xmonad =<< xmobar  defaults 
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -165,7 +167,9 @@ main = do
 --
 -- No need to modify this.
 --
-defaults = def {
+defaults = 
+   docks 
+   def {
       -- simple stuff
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,

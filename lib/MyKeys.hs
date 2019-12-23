@@ -10,6 +10,7 @@ where
 --
 import XMonad
 import XMonad.Util.SpawnOnce
+import XMonad.Hooks.ManageDocks
 -- import XMonad.Util.Run(runProcessWithInput,runProcessWithInputAndWait)
 
 import System.Exit
@@ -105,7 +106,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Use this binding with avoidStruts from Hooks.ManageDocks.
     -- See also the statusBar function from Hooks.DynamicLog.
     --
-    -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
+    , ((modm              , xK_b     ), sendMessage ToggleStruts)
 
     -- Quit xmonad
     , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
