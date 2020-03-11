@@ -1,0 +1,29 @@
+** Workspaces
+m-a A/V+
+0..9-=xz
+F5
+Vol+,-,Mute
+Email, Search, Home, Calc
+
+** Reserved 
+  +---------+----------------------+----------+
+  | b       | toggle grun          |          |
+  | c       |                      | kill win |
+  | e,r,w   | east,middle,west     |          |
+  | h,l     | resizing             |          |
+  | j,k,TAB | cycle                | reverse  |
+  | m,CR    | go/creat main win    |          |
+  | n,SPC   | default/set Styles   |          |
+  | p       | grun                 | dmenu    |
+  | r       |                      |          |
+  | t       | set default tiling   |          |
+  | w       |                      |          |
+  | /,?     | Select ws from menu  | Help     |
+  | .,,     | Inc/Dec # main wndws |          |
+  |---------+----------------------+----------|
+  | Sleep   | sleep                |          |
+  |         |                      |          |
+
+** Free
+mod-d,f,g,i,o,s,u,v,y
+[]\
