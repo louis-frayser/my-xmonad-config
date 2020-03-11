@@ -36,10 +36,10 @@ import Data.Maybe
 myExtraWorkspaces =
   [(xK_0, "Research+")
   ,(xK_minus, "A/V+")
-  ,(xK_equal, "Graphics+")
-  ,(xK_x,"Admin+") -- , (xK_KP_1,"Admin+") keypad codes don't work
+  ,(xK_equal, "Practice+")
+  ,(xK_x,"Graphics+")
   ,(xK_y,"Project+")
-  ,(xK_z,"Practice+")
+  ,(xK_z,"Admin+") -- , (xK_KP_1,"Admin+") keypad codes don't work
   ]
 
 
