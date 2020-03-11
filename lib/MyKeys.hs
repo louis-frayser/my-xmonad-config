@@ -36,8 +36,21 @@ xspawn cmd =spawn ("PATH=/usr/lucho/bin:$PATH;" ++ cmd)
 screenshot::  X()
 screenshot=spawn "sleep 1; /usr/bin/mate-screenshot -a"
 
+-- | Alsa Mixer
+data MixArg = Up | Down | ToggleMute
+amixer :: MixArg -> X ()
+amixer cmd =
+  let cstr = 
+         "amixer sset " ++ 
+            case cmd of 
+              Up   -> "PCM playback 20+"
+              Down -> "PCM playback 20-"
+              ToggleMute -> "Master toggle"
+   in spawn cstr
+   
 
--- | Multimedia 
+-- | Multimedia  (Pulse Audio)
+volToggle,volDn,volUp ::   X ()
 volDn = spawn "amixer -D pulse sset Master,0 2000- unmute"
 volUp = spawn "amixer -D pulse sset Master,0 2000+ unmute"
 volToggle = spawn "amixer -D pulse sset Master,0 toggle"
@@ -163,9 +176,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 {- | Multimedia Keys -}
     ++
     [
-    ((0   , xF86XK_AudioLowerVolume), volDn )
-    ,((0   , xF86XK_AudioRaiseVolume), volUp)
-    ,((0   , xF86XK_AudioMute ), volToggle)
+     ((0   , xF86XK_AudioLowerVolume), amixer Down)
+    ,((0   , xF86XK_AudioRaiseVolume), amixer Up)
+    ,((0   , xF86XK_AudioMute ), amixer ToggleMute)
     ]
 
 {- | Swap ltor visible workspaces -}
@@ -193,6 +206,17 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 --  , ( (modm, xK_Home), screenshot)
 -}
     ]
+
+    ++ kcmds xK_u (spawn $ "xmessage regular key: " ++ show xK_u) (spawn  $ "xmessage shifted: "  ++ show xK_u)
+
+kcmds k cmd scmd  = 
+    [ ( (modm, k),      cmd)
+    , ( (modm .|. shiftMask, k), scmd)
+    ]
+       where modm = myModMask
+
+keyWithWS k ws = kcmds k (windows $ W.greedyView ws) 
+                         (windows $ W.shift ws)
 
 showkey :: String -> X ()
 showkey k = io $ System.IO.hPutStrLn stderr $  "KEY: " ++  k
