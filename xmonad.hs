@@ -26,7 +26,7 @@ import MyKeys (myKeys, myModMask)
 -- certain contrib modules.
 --
 -- myTerminal      = "xterm"
-myTerminal      = "terminator"
+myTerminal      = "terminator||konsole||xterm"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
