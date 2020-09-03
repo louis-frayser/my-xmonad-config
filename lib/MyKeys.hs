@@ -40,21 +40,21 @@ screenshot=spawn "sleep 1; /usr/bin/mate-screenshot -a"
 data MixArg = Up | Down | ToggleMute
 amixer :: MixArg -> X ()
 amixer cmd =
-  let cstr = 
-         "amixer sset " ++ 
+  let cstr = "amixer sset " ++ 
             case cmd of 
-              Up   -> "PCM playback 20+"
+              Up   -> " Master 100%; " ++ "amixer sset PCM playback 20+"
               Down -> "PCM playback 20-"
               ToggleMute -> "Master toggle"
    in spawn cstr
    
 
+{-
 -- | Multimedia  (Pulse Audio)
 volToggle,volDn,volUp ::   X ()
 volDn = spawn "amixer -D pulse sset Master,0 2000- unmute"
 volUp = spawn "amixer -D pulse sset Master,0 2000+ unmute"
 volToggle = spawn "amixer -D pulse sset Master,0 toggle"
-
+-}
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
@@ -160,17 +160,21 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 {- | View  two workspacers as a pair -}
     ++
     [
-     ((modm,  xK_a            ), view2 "A/V+" "Graphics+")
+     ((modm,  xK_a            ), view2 "Practice" "A/V")
     ,((0    , xF86XK_HomePage ), view2 "Admin"  "Admin+") 
     ,((modm , xK_F1),            view2 "Admin"  "Admin+")
-    ,((0    , xF86XK_Search   ), view2 "PIM"    "A/V")
-    ,((modm , xK_F3           ), view2 "PIM"    "A/V")
-    ,((0    , xF86XK_Calculator),view2 "Project" "Research")
-    ,((modm , xK_F12),           view2 "Project" "Research")
     ,((0    , xF86XK_Mail),      view2 "Home" "PIM")
     ,((modm , xK_F2),            view2 "Home" "PIM")
+
+    ,((0    , xF86XK_Search   ), view2 "PIM"    "A/V")
+    ,((modm , xK_F3           ), view2 "PIM"    "A/V")
+
     ,((0    , xF86XK_Tools),     view2 "Practice" "Project")
     ,((modm , xK_F4),            view2 "Practice" "Project")
+
+    ,((0    , xF86XK_Calculator),view2 "Project" "Research")
+    ,((modm , xK_F11),           view2 "Graphics" "Graphics+")
+    ,((modm , xK_F12),           view2 "Project" "Research")
     ]
 
 {- | Multimedia Keys -}
