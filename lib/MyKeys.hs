@@ -11,7 +11,6 @@ where
 import XMonad
 import XMonad.Util.SpawnOnce
 import XMonad.Hooks.ManageDocks
--- import XMonad.Util.Run(runProcessWithInput,runProcessWithInputAndWait)
 
 import System.Exit
 import System.IO (stderr, hPutStrLn)
@@ -21,7 +20,9 @@ import XMonad.Actions.OnScreen
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import Graphics.X11.ExtraTypes.XF86   -- KBD Key names
-import MyViews
+import MyViews(helpCommand,helpWsCommand,
+               myExtraWorkspaces,
+               swapCurrentViews,view2)
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -35,6 +36,9 @@ xspawn cmd =spawn ("PATH=/usr/lucho/bin:$PATH;" ++ cmd)
 
 screenshot::  X()
 screenshot=spawn "sleep 1; /usr/bin/mate-screenshot -a"
+
+switchSession ::  X()
+switchSession = spawn "dm-tool switch-to-greeter"
 
 -- | Alsa Mixer
 data MixArg = Up | Down | ToggleMute
@@ -185,14 +189,21 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ,((0   , xF86XK_AudioMute ), amixer ToggleMute)
     ]
 
-{- | Swap ltor visible workspaces -}
+{- | Swap LtoR visible workspaces -}
 
   ++
   [
     ( (modm , xK_F5), swapCurrentViews)
   ]
-  -- 
--- | Run Program
+
+
+  -- | Swap Sessions
+  ++
+  [
+    ( (modm , xK_Super_L), switchSession )
+   
+  ]
+  -- | Run Program
     ++
     [
       ( (0, xK_Print), screenshot)
@@ -213,15 +224,21 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     ++ kcmds xK_u (spawn $ "xmessage regular key: " ++ show xK_u) (spawn  $ "xmessage shifted: "  ++ show xK_u)
 
+-- | Add a key and it's shifted counterpart for the
+--   specified commands.
 kcmds k cmd scmd  = 
     [ ( (modm, k),      cmd)
     , ( (modm .|. shiftMask, k), scmd)
     ]
        where modm = myModMask
 
+-- | keyWithWS k ws
+--   Add standar actions for k, shift-k for workspacs
 keyWithWS k ws = kcmds k (windows $ W.greedyView ws) 
                          (windows $ W.shift ws)
 
 showkey :: String -> X ()
 showkey k = io $ System.IO.hPutStrLn stderr $  "KEY: " ++  k
+
+--  Super_L + Tab
 -- vim: set expandtab tabstop=4 shiftwidth=4 ai:
