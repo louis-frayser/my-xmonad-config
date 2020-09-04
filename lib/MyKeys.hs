@@ -1,12 +1,8 @@
 module MyKeys (myKeys,myModMask)
 where
 --
--- xmonad example config file.
---
--- A template showing all available configuration hooks,
--- and how to override the defaults in your own xmonad.hs conf file.
---
--- Normally, you'd only override those defaults you care about.
+-- part of my XMonad configuration: 
+-- the keybindings
 --
 import XMonad
 import XMonad.Util.SpawnOnce
@@ -20,6 +16,8 @@ import XMonad.Actions.OnScreen
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import Graphics.X11.ExtraTypes.XF86   -- KBD Key names
+import MyKbFunctions(MixArg(..),alertRegularKey,alertShiftedKey,
+                      amixer, screenshot,switchSession)
 import MyViews(helpCommand,helpWsCommand,
                myExtraWorkspaces,
                swapCurrentViews,view2)
@@ -30,34 +28,25 @@ import MyViews(helpCommand,helpWsCommand,
 --
 myModMask       = mod1Mask
 
--- | Helper functions
-xspawn :: String -> X ()
-xspawn cmd =spawn ("PATH=/usr/lucho/bin:$PATH;" ++ cmd)
+-- | Add a key and it's shifted counterpart for the
+--   specified commands.
+keycmds k cmd scmd  = 
+    [ ( (modm, k),      cmd)
+    , ( (modm .|. shiftMask, k), scmd)
+    ]
+      where modm = myModMask
 
-screenshot::  X()
-screenshot=spawn "sleep 1; /usr/bin/mate-screenshot -a"
 
-switchSession ::  X()
-switchSession = spawn "dm-tool switch-to-greeter"
+-- | Display a message for Key and Shift-Key presses
+debugKey k = 
+    keycmds k (spawn $ "xmessage regular key: " ++ show k) (spawn  $ "xmessage shifted: "  ++ show k)
 
--- | Alsa Mixer
-data MixArg = Up | Down | ToggleMute
-amixer :: MixArg -> X ()
-amixer cmd =
-  let cstr = "amixer sset " ++ 
-            case cmd of 
-              Up   -> " Master 100%; " ++ "amixer sset PCM playback 20+"
-              Down -> "PCM playback 20-"
-              ToggleMute -> "Master toggle"
-   in spawn cstr
-   
 
-{-
--- | Multimedia  (Pulse Audio)
-volToggle,volDn,volUp ::   X ()
-volDn = spawn "amixer -D pulse sset Master,0 2000- unmute"
-volUp = spawn "amixer -D pulse sset Master,0 2000+ unmute"
-volToggle = spawn "amixer -D pulse sset Master,0 toggle"
+    
+{-- | keyWithWS k ws
+--   Add standard actions for k, shift-k for workspacs
+keyWithWS k ws =
+  keycmds k (windows $ W.greedyView ws) (windows $ W.shift ws)
 -}
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
@@ -66,10 +55,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
 
     -- launch dmenu
-    , ((modm,               xK_p     ), xspawn "dmenu_run")
+    , ((modm,               xK_p     ), spawn "dmenu_run")
 
     -- launch gmrun
-    , ((modm .|. shiftMask, xK_p     ), xspawn "grun")
+    , ((modm .|. shiftMask, xK_p     ), spawn "grun")
 
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
@@ -132,7 +121,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
     ]
     ++
-
     --
     -- mod-[1..9], Switch to workspace N
     -- mod-shift-[1..9], Move client to workspace N
@@ -152,7 +140,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     
     ++
     
-    -- Add shortcuts for exra workspaces
+    -- Add shortcuts for extra workspaces
     [ ((myModMask, key), (windows $ W.greedyView ws))
        | (key,ws) <- myExtraWorkspaces
     ] ++ [
@@ -181,64 +169,35 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ,((modm , xK_F12),           view2 "Project" "Research")
     ]
 
-{- | Multimedia Keys -}
+    {- | Multimedia Keys -}
     ++
     [
      ((0   , xF86XK_AudioLowerVolume), amixer Down)
     ,((0   , xF86XK_AudioRaiseVolume), amixer Up)
     ,((0   , xF86XK_AudioMute ), amixer ToggleMute)
     ]
-
-{- | Swap LtoR visible workspaces -}
-
-  ++
-  [
-    ( (modm , xK_F5), swapCurrentViews)
-  ]
-
-
-  -- | Swap Sessions
-  ++
-  [
-    ( (modm , xK_Super_L), switchSession )
-   
-  ]
-  -- | Run Program
     ++
+    
+    [ -- | Swap LtoR visible workspaces
+      ( (modm , xK_F5), swapCurrentViews)
+    , -- | Swap Sessions
+      ( (modm , xK_Super_L), switchSession )
+    ]
+    ++
+
+    {- | Run Programs -}
     [
       ( (0, xK_Print), screenshot)
-    , ( (modm, xK_slash),      helpWsCommand)
+    , ( (modm, xK_slash),      helpWsCommand )
+      -- '?' => shift-slash
     , ( (modm .|. shiftMask, xK_slash), helpCommand)
---    , ( (modm, xK_question), helpCommand)
 
-{- Note colon is registered as shift-semicolon
+    {- Note colon is registered as shift-semicolon
     , ( (modm .|. shiftMask, xK_semicolon), showkey "sft-semicolon")
-    , ( (modm, xK_colon),          showkey "colon")
-
+    , ( (modm, xK_colon), showkey "colon")
     , ( (modm, xK_semicolon), showkey "semicolon")
-
-    
---  , ( (modm, xK_Home), screenshot)
 -}
-    ]
+    ] ++ debugKey xK_u
+    
 
-    ++ kcmds xK_u (spawn $ "xmessage regular key: " ++ show xK_u) (spawn  $ "xmessage shifted: "  ++ show xK_u)
-
--- | Add a key and it's shifted counterpart for the
---   specified commands.
-kcmds k cmd scmd  = 
-    [ ( (modm, k),      cmd)
-    , ( (modm .|. shiftMask, k), scmd)
-    ]
-       where modm = myModMask
-
--- | keyWithWS k ws
---   Add standar actions for k, shift-k for workspacs
-keyWithWS k ws = kcmds k (windows $ W.greedyView ws) 
-                         (windows $ W.shift ws)
-
-showkey :: String -> X ()
-showkey k = io $ System.IO.hPutStrLn stderr $  "KEY: " ++  k
-
---  Super_L + Tab
 -- vim: set expandtab tabstop=4 shiftwidth=4 ai:
