@@ -17,7 +17,7 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import Graphics.X11.ExtraTypes.XF86   -- KBD Key names
 import MyKbFunctions(MixArg(..),alertRegularKey,alertShiftedKey,
-                      amixer, screenshot,switchSession)
+                      amixer, lockScreen, screenshot,switchSession)
 import MyViews(helpCommand,helpWsCommand,
                myExtraWorkspaces,
                swapCurrentViews,view2)
@@ -96,6 +96,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Shrink the master area
     , ((modm,               xK_h     ), sendMessage Shrink)
 
+    -- Lock screen
+    , ((modm .|. shiftMask,  xK_l     ), lockScreen )
     -- Expand the master area
     , ((modm,               xK_l     ), sendMessage Expand)
 

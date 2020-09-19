@@ -1,7 +1,7 @@
 module MyKbFunctions (MixArg(..),
-                      alertRegularKey,
-                      alertShiftedKey,
+                      alertRegularKey, alertShiftedKey,
                        amixer,
+                      lockScreen,
                        screenshot,
                        showkey,
                        switchSession, xspawn)
@@ -51,9 +51,14 @@ screenshot::  X()
 screenshot=spawn "sleep 1; /usr/bin/mate-screenshot -a"
 
 -- | Change X server via greeter
-switchSession ::  X()
+lockScreen,switchSession ::  X()
 switchSession = spawn "dm-tool switch-to-greeter"
-                      
+
+-- | Call xscreensave to lock screen and display the "logan as other user" dialog
+lockScreen = spawn "xscreensaver-command -lock"
+
+-- --------------------------------------------------------
+--  ============================================================
 -- | Diagonostic
 -- --------------------------------------------------------
 showkey :: String -> X ()
