@@ -17,7 +17,7 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import Graphics.X11.ExtraTypes.XF86   -- KBD Key names
 import MyKbFunctions(MixArg(..),alertRegularKey,alertShiftedKey,
-                      amixer, lockScreen, screenshot,switchSession)
+                      amixer, lockScreen, runEmacs,screenshot,switchSession)
 import MyViews(helpCommand,helpWsCommand,
                myExtraWorkspaces,
                swapCurrentViews,view2)
@@ -27,6 +27,7 @@ import MyViews(helpCommand,helpWsCommand,
 --
 --
 myModMask       = mod1Mask
+mod4 = mod4Mask
 
 -- | Add a key and it's shifted counterpart for the
 --   specified commands.
@@ -193,6 +194,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ( (modm, xK_slash),      helpWsCommand )
       -- '?' => shift-slash
     , ( (modm .|. shiftMask, xK_slash), helpCommand)
+    , ( (mod4, xK_e),  runEmacs )
 
     {- Note colon is registered as shift-semicolon
     , ( (modm .|. shiftMask, xK_semicolon), showkey "sft-semicolon")

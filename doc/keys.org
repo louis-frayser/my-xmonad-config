@@ -1,9 +1,9 @@
 ** Workspaces
 m-a A/V+
-0..9-=xz
-F5
+[1-9-=xz]
+F{1,5,11}
 Vol+,-,Mute
-Email, Search, Home, Calc
+Fn+{Email, Search, Home, Calc}
 
 ** Reserved 
   +---------+----------------------+----------+
@@ -15,6 +15,7 @@ Email, Search, Home, Calc
   | m,CR    | go/creat main win    |          |
   | n,SPC   | default/set Styles   |          |
   | p       | grun                 | dmenu    |
+  | q,Q     | restart              | Quit     |
   | r       |                      |          |
   | t       | set default tiling   |          |
   | w       |                      |          |
@@ -25,5 +26,5 @@ Email, Search, Home, Calc
   |         |                      |          |
 
 ** Free
-mod-d,f,g,i,o,s,u,v,y
+mod-{d,f,g,i,o,s,u,v,y}
 []\

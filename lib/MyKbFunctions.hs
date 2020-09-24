@@ -2,6 +2,7 @@ module MyKbFunctions (MixArg(..),
                       alertRegularKey, alertShiftedKey,
                        amixer,
                       lockScreen,
+                       runEmacs,
                        screenshot,
                        showkey,
                        switchSession, xspawn)
@@ -57,6 +58,9 @@ switchSession = spawn "dm-tool switch-to-greeter"
 -- | Call xscreensave to lock screen and display the "logan as other user" dialog
 lockScreen = spawn "xscreensaver-command -lock"
 
+-- | Launch or refocus Emacs
+runEmacs :: X()
+runEmacs = spawn "pgrep -u $USER emacs || exec emacs"
 -- --------------------------------------------------------
 --  ============================================================
 -- | Diagonostic
