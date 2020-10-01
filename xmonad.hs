@@ -45,6 +45,8 @@ myBorderWidth   = 1
 -- A tagging example:
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
+-- See lib/MyViews.hs
+--
 --
 -- Border colors for unfocused and focused windows, respectively.
 --
@@ -53,7 +55,7 @@ myFocusedBorderColor = "#ffff7f"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings in the separate keys files
---
+-- lib/MyKeys.hs
      
 ------------------------------------------------------------------------
 -- Mouse bindings: default actions bound to mouse events
@@ -73,6 +75,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- you may also bind events to the mouse scroll wheel (button4 and button5)
     ]
+
 ------------------------------------------------------------------------
 -- Layouts:
 
@@ -154,13 +157,6 @@ myStartupHook = fst (spawn::String -> X (),spawnOnce) $ "/export/home/frayser/.x
 
 
 ------------------------------------------------------------------------
--- Now run xmonad with all the defaults we set up.
-
--- Run xmonad with the settings you specify. No need to modify this.
---
--- main = xmonad defaults
-main = xmonad =<< xmobar  defaults 
-
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
 -- use the defaults defined in xmonad/XMonad/Config.hs
@@ -190,3 +186,12 @@ defaults =
         logHook            = myLogHook,
         startupHook        = myStartupHook
     }
+
+
+-- Now run xmonad with all the defaults we set up.
+
+-- Run xmonad with the settings you specify. No need to modify this.
+--
+-- main = xmonad defaults
+main = xmonad =<< xmobar  defaults 
+
