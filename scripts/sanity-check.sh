@@ -34,7 +34,7 @@ XMPID=$(xmpid)
 echo $XMPID > $PIDFILE
 
 xhost local:
-xmessage XMPID: $XMPID
+#xmessage XMPID: $XMPID &
 
 ### Run if not already run
 [ "$pid" = $XMPID ] || exec $XMHOME/scripts/spawnOnce.sh
