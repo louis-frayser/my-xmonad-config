@@ -34,12 +34,15 @@ import Data.Maybe
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
 myExtraWorkspaces =
-  [(xK_0, "Research+")
-  ,(xK_minus, "A/V+")
-  ,(xK_equal, "Practice+")
-  ,(xK_x,"Graphics+")
-  ,(xK_y,"Project+")
-  ,(xK_z,"Admin+") -- , (xK_KP_1,"Admin+") keypad codes don't work
+  [
+    (xK_z,   "Admin+") -- also ctrl-1
+  , (xK_KP_2, "Home+") -- also ctrl-2
+  , (xK_KP_3, "PIM+")  -- also ctrl-3
+  , (xK_equal, "Practice+") -- ctrl-4
+  , (xK_0, "Research+")    -- ctrl-5
+  , (xK_y,"Project+")      -- ctrl-6
+  , (xK_x,"Graphics+")     -- ctrl-7
+  , (xK_minus, "A/V+")     -- ctrl-8
   ]
 
 
