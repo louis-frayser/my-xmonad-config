@@ -43,6 +43,7 @@ myExtraWorkspaces =
   , (xK_y,"Project+")      -- ctrl-6
   , (xK_x,"Graphics+")     -- ctrl-7
   , (xK_minus, "A/V+")     -- ctrl-8
+  , (xK_KP_9, "Scratch+")      -- ctrl-9
   ]
 
 
