@@ -35,19 +35,24 @@ import Data.Maybe
 --
 myExtraWorkspaces =
   [
-    (xK_z,   "Admin+") -- also ctrl-1
+   (xK_KP_0, "Tmp+")      -- ctrl-0
+  , (xK_z,   "Admin+") -- also ctrl-1
   , (xK_KP_2, "Home+") -- also ctrl-2
   , (xK_KP_3, "PIM+")  -- also ctrl-3
-  , (xK_equal, "Practice+") -- ctrl-4
-  , (xK_0, "Research+")    -- ctrl-5
+  , (xK_KP_4, "Practice+") -- ctrl-4
+  , (xK_KP_5, "Research+")    -- ctrl-5
   , (xK_y,"Project+")      -- ctrl-6
   , (xK_x,"Graphics+")     -- ctrl-7
-  , (xK_minus, "A/V+")     -- ctrl-8
+  , (xK_KP_8, "A/V+")     -- ctrl-8
   , (xK_KP_9, "Scratch+")      -- ctrl-9
+  , (xK_KP_Subtract, "Eleven+")      -- ctrl-'-'
+  , (xK_KP_Add, "Twelve+")      -- ctrl-'+'
   ]
 
 
-myWorkspaces    = ["Admin","Home","PIM","Practice","Research","Project","Graphics","A/V","Scratch"]
+myWorkspaces = ["Tmp", "Admin","Home","PIM","Practice",
+                 "Research","Project","Graphics",
+                 "A/V","Scratch", "Eleven", "Twelve" ]
   ++ (map snd myExtraWorkspaces)
 
 {- | Set the views (monitors) to the given workspaces -}
