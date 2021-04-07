@@ -5,6 +5,11 @@ where
 -- the keybindings
 --
 import XMonad
+  ((.|.), ChangeLayout(..),IncMasterN(..),Resize(..),
+   XConfig(..), io, kill, refresh,setLayout, sendMessage,
+    spawn,windows,screenWorkspace,whenJust,
+    withFocused)
+import KeyDefs
 import XMonad.Util.SpawnOnce
 import XMonad.Hooks.ManageDocks
 
