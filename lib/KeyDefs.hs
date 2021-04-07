@@ -11,3 +11,5 @@ module KeyDefs
     controlMask,mod1Mask,mod4Mask,shiftMask)
 where
 import XMonad
+modmR = controlMask
+modmL = mod1Mask
