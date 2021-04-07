@@ -24,7 +24,7 @@ import Graphics.X11.ExtraTypes.XF86   -- KBD Key names
 import MyKbFunctions(MixArg(..),alertRegularKey,alertShiftedKey,
                       amixer, lockScreen, runEmacs,screenshot,switchSession)
 import MyViews(helpCommand,helpWsCommand,
-               myExtraWorkspaces, myWorkspaces,
+               myWorkspaces, myWorkspacesL, myWorkspacesR,
                swapCurrentViews,view2)
 
 ------------------------------------------------------------------------
@@ -134,10 +134,18 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- mod-shift-[0..9], Move client to workspace N
     --
     [((m .|. modm, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) ([xK_0 .. xK_9] ++ [xK_minus, xK_equal])
+        | (i, k) <- zip (myWorkspacesL) ([xK_0 .. xK_9] ++ [xK_minus, xK_equal])
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
     ++
-
+ 
+    
+    -- Add analogous shortcuts for extra workspaces
+    --    [ ((myModMask, key), (windows $ W.greedyView ws))
+    [((m .|. modmR, k), windows $ f i)
+    | (i, k) <- zip (myWorkspacesR) ([xK_0 .. xK_9] ++ [xK_minus, xK_equal])
+    , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+    ++
+ 
     --
     -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
     -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
@@ -145,18 +153,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
         | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-    
-    ++
-    
-    -- Add shortcuts for extra workspaces
-    --    [ ((myModMask, key), (windows $ W.greedyView ws))
-    [ ((controlMask, key), (windows $ W.greedyView ws))
-       | (key,ws) <- myExtraWorkspaces
-    ] ++ [
-       ((controlMask .|. shiftMask, key), (windows $ W.shift ws))
-       | (key,ws) <- myExtraWorkspaces
-    ]
-
+ 
 
 {- | View  two workspacers as a pair -}
     ++

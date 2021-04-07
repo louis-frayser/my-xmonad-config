@@ -8,7 +8,8 @@ module KeyDefs
     xK_w, xK_F1,xK_F2,xK_F3,xK_F4,xK_F5,
     xK_F6,xK_F7,xK_F8,xK_F9,xK_F10,xK_F11,
     xK_F12,
-    controlMask,mod1Mask,mod4Mask,shiftMask)
+    controlMask,mod1Mask,mod4Mask,shiftMask,
+    modmR,modmL)
 where
 import XMonad
 modmR = controlMask

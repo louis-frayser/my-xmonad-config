@@ -1,5 +1,5 @@
-module MyViews (myWorkspaces,myExtraWorkspaces,swapCurrentViews,
-  view2,helpCommand,helpWsCommand)
+module MyViews (myWorkspacesL,myWorkspacesR,myWorkspaces,
+               swapCurrentViews, view2,helpCommand,helpWsCommand)
 {- | View & view-controller definitions that must be shared between xmonad and config modules
  -}
 where
@@ -33,27 +33,14 @@ import Data.Maybe
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
-myExtraWorkspaces =
-  [
-   (xK_KP_0, "Tmp+")      -- ctrl-0
-  , (xK_1,   "Admin+") -- also ctrl-1
-  , (xK_2, "Home+") -- also ctrl-2
-  , (xK_3, "PIM+")  -- also ctrl-3
-  , (xK_4, "Practice+") -- ctrl-4
-  , (xK_5, "Research+")    -- ctrl-5
-  , (xK_6,"Project+")      -- ctrl-6
-  , (xK_7,"Graphics+")     -- ctrl-7
-  , (xK_8, "A/V+")     -- ctrl-8
-  , (xK_9, "Scratch+")      -- ctrl-9
-  , (xK_KP_Subtract, "Eleven+")      -- ctrl-'-'
-  , (xK_KP_Add, "Twelve+")      -- ctrl-'+'
-  ]
 
-
-myWorkspaces = ["Tmp", "Admin","Home","PIM","Practice",
+myWorkspacesL = ["Tmp", "Admin","Home","PIM","Practice",
                  "Research","Project","Graphics",
                  "A/V","Scratch", "Eleven", "Twelve" ]
-  ++ (map snd myExtraWorkspaces)
+
+myWorkspacesR = map (++ "+") myWorkspacesL
+
+myWorkspaces = myWorkspacesL ++ myWorkspacesR
 
 {- | Set the views (monitors) to the given workspaces -}
 view2:: String->String->X ()
