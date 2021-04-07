@@ -19,9 +19,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Layout.Reflect
 
 import Graphics.X11.ExtraTypes.XF86   -- KBD Key names
-import MyViews (myWorkspaces)
-import MyKeys (myKeys, myModMask)
-
+import MyController(myKeys, myModMask, myWorkspaces)
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --

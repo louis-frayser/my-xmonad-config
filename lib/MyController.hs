@@ -1,4 +1,4 @@
-module MyKeys (myKeys,myModMask)
+module MyController (myKeys,myModMask, myWorkspaces)
 where
 --
 -- part of my XMonad configuration: 
@@ -19,7 +19,7 @@ import Graphics.X11.ExtraTypes.XF86   -- KBD Key names
 import MyKbFunctions(MixArg(..),alertRegularKey,alertShiftedKey,
                       amixer, lockScreen, runEmacs,screenshot,switchSession)
 import MyViews(helpCommand,helpWsCommand,
-               myExtraWorkspaces,
+               myExtraWorkspaces, myWorkspaces,
                swapCurrentViews,view2)
 
 ------------------------------------------------------------------------
