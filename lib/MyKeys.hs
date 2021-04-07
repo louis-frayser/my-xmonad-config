@@ -144,10 +144,11 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ++
     
     -- Add shortcuts for extra workspaces
-    [ ((myModMask, key), (windows $ W.greedyView ws))
+    --    [ ((myModMask, key), (windows $ W.greedyView ws))
+    [ ((controlMask, key), (windows $ W.greedyView ws))
        | (key,ws) <- myExtraWorkspaces
     ] ++ [
-       ((myModMask .|. shiftMask, key), (windows $ W.shift ws))
+       ((controlMask .|. shiftMask, key), (windows $ W.shift ws))
        | (key,ws) <- myExtraWorkspaces
     ]
 

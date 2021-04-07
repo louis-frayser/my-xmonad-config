@@ -36,15 +36,15 @@ import Data.Maybe
 myExtraWorkspaces =
   [
    (xK_KP_0, "Tmp+")      -- ctrl-0
-  , (xK_z,   "Admin+") -- also ctrl-1
-  , (xK_KP_2, "Home+") -- also ctrl-2
-  , (xK_KP_3, "PIM+")  -- also ctrl-3
-  , (xK_KP_4, "Practice+") -- ctrl-4
-  , (xK_KP_5, "Research+")    -- ctrl-5
-  , (xK_y,"Project+")      -- ctrl-6
-  , (xK_x,"Graphics+")     -- ctrl-7
-  , (xK_KP_8, "A/V+")     -- ctrl-8
-  , (xK_KP_9, "Scratch+")      -- ctrl-9
+  , (xK_1,   "Admin+") -- also ctrl-1
+  , (xK_2, "Home+") -- also ctrl-2
+  , (xK_3, "PIM+")  -- also ctrl-3
+  , (xK_4, "Practice+") -- ctrl-4
+  , (xK_5, "Research+")    -- ctrl-5
+  , (xK_6,"Project+")      -- ctrl-6
+  , (xK_7,"Graphics+")     -- ctrl-7
+  , (xK_8, "A/V+")     -- ctrl-8
+  , (xK_9, "Scratch+")      -- ctrl-9
   , (xK_KP_Subtract, "Eleven+")      -- ctrl-'-'
   , (xK_KP_Add, "Twelve+")      -- ctrl-'+'
   ]
