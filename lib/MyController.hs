@@ -34,7 +34,7 @@ import MyViews(helpCommand,helpWsCommand,
 myModMask       = mod1Mask
 mod4 = mod4Mask
 
--- | Add a key and it's shifted counterpart for the
+-- | Declare a binding for key and it's shifted counterpart for the
 --   specified commands.
 keycmds k cmd scmd  = 
     [ ( (modm, k),      cmd)
@@ -42,7 +42,10 @@ keycmds k cmd scmd  =
     ]
       where modm = myModMask
 
-
+-- | Stadandard binding for key to a workspace
+stdkey k ws =
+  keycmds k (windows $ W.greedyView ws) (windows $ W.shift ws)
+  
 -- | Display a message for Key and Shift-Key presses
 debugKey k = 
     keycmds k (spawn $ "xmessage regular key: " ++ show k) (spawn  $ "xmessage shifted: "  ++ show k)
@@ -145,7 +148,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     | (i, k) <- zip (myWorkspacesR) ([xK_0 .. xK_9] ++ [xK_minus, xK_equal])
     , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
     ++
- 
+
+    -- | Alternate bindings for a few actions
+    stdkey xK_x "Graphics+"
+    ++
+    stdkey xK_z "Admin+"
+    ++
+    
     --
     -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
     -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
