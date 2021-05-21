@@ -1,10 +1,11 @@
+TARGET=xmonad-x86_64-linux
 OBJS=*.o lib/*.o *.hi lib/*.hi
 BAK=*~ */*~
 all: check
 
 check:
 	@clear 
-	ghc -ilib xmonad
+	ghc -ilib -o ${TARGET} xmonad
 	pidof xmessage && killall xmessage; true
 	xmonad --recompile
 clean:
