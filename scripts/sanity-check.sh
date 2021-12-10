@@ -1,7 +1,7 @@
 #! /bin/sh
 
 XMHOME=$HOME/.xmonad
-RUNDIR=$XMHOME/run+
+RUNDIR=$XMHOME/run
 PIDFILE=$RUNDIR/xmonad.pid
 
 ppids () 

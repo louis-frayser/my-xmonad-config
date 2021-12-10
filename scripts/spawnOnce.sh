@@ -1,5 +1,6 @@
 #! /bin/bash
 export PATH=~/bin:/usr/lucho/bin:/usr/local/bin:/bin:$PATH
+xrdb -merge ~/.Xresources
 #xrandr.cmd
 #pulseaudio  -D
 xsetroot -bg 'gray30' -fg '#c0c0b0'  -mod 16 16
@@ -10,7 +11,7 @@ fbsetbg -t "/export/images/public/Wallpaper/Hot Chix/tatoo-lady.jpg"
 
 #xdaliclock -24 -cycle -bw 4 -transparent &
 # { terminator --profile pretty || konsole || mate-terminal;} &
-# xscreensaver -no-splash&
+xscreensaver -no-splash&
 mountpoint ~/doc || xmessage -font "-*-lucida-*-r-*-*-24-*-*-*-*-*-*-*" "Mount the crypt! Press [Okay]!"
 
 {
