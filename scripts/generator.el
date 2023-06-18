@@ -1,7 +1,4 @@
-;; This buffer is for text that is not saved, and for Lisp evaluation.
-;; To create a file, visit it with C-x C-f and enter text in its buffer.
-
-
+;;; Just code to generate code
 (setq wss
      '( "Admin" "Home" "PIM" "Practice" "Research" "Project" "Graphics" "A/V" "Scratch"))
 
