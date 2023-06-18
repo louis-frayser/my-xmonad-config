@@ -6,3 +6,4 @@ xmonad.errors
 xmonad.state
 *.out
 run
+*.swp
