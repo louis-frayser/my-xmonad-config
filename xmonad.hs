@@ -6,20 +6,28 @@
 --
 -- Normally, you'd only override those defaults you care about.
 --
-import XMonad
-import XMonad.Util.SpawnOnce
-import Data.Monoid
-import System.Exit
-import XMonad.Actions.OnScreen
 
-import qualified XMonad.StackSet as W
+import Data.Monoid
+import System.Posix.Env
+import Data.Maybe
 import qualified Data.Map        as M
+
+import System.Posix.Env(getEnv)
+import System.Exit
+import System.Directory
+
+import Graphics.X11.ExtraTypes.XF86   -- KBD Key names
+import XMonad.Actions.OnScreen
+import qualified XMonad.StackSet as W
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Layout.Reflect
+import XMonad.Layout.LayoutModifier
+import XMonad
+import XMonad.Util.SpawnOnce
 
-import Graphics.X11.ExtraTypes.XF86   -- KBD Key names
 import MyController(myKeys, myModMask, myWorkspaces)
+
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
@@ -150,9 +158,8 @@ myLogHook = return ()
 -- By default, do nothing.
 -- myStartupHook = return ()
 -- Original was spawnOnce
-myStartupHook :: X ()
-myStartupHook = fst (spawn::String -> X (),spawnOnce) $ "/export/home/frayser/.xmonad/scripts/sanity-check.sh"
-
+myStartupHook :: String -> X ()
+myStartupHook configDir = fst (spawn::String -> X (),spawnOnce) $ configDir ++ "/scripts/sanity-check.sh"
 
 ------------------------------------------------------------------------
 -- A structure containing your configuration settings, overriding
@@ -161,7 +168,11 @@ myStartupHook = fst (spawn::String -> X (),spawnOnce) $ "/export/home/frayser/.x
 --
 -- No need to modify this.
 --
-defaults = 
+type MT = Mirror Tall
+type CT = Choose Tall
+type ML = XMonad.Layout.LayoutModifier.ModifiedLayout
+defaults :: String -> XConfig ( ML AvoidStruts (CT (Choose MT (CT (Choose MT Full)))))
+defaults configDir = 
    docks 
    def {
       -- simple stuff
@@ -182,14 +193,31 @@ defaults =
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
         logHook            = myLogHook,
-        startupHook        = myStartupHook
+        startupHook        = myStartupHook configDir
     }
 
+xmonad_home :: IO String
+xmonad_home =
+  do m_xmh <- getEnv "XMONAD_HOME"
+     home <-  getEnv "HOME" >>= (\s -> return $ fromMaybe (error "No $HOME is set") s) 
+     let cfg_dir=home ++ "/.config/xmonad"
+     let dfl_dir=home ++ "/.xmonad" -- Old/coventional xmonad home
+     is_cfg_dir <- doesDirectoryExist cfg_dir
+     is_dfl_dir <- doesDirectoryExist dfl_dir
+     let out = case (m_xmh,is_cfg_dir,is_dfl_dir) of
+                   (Nothing, True, _) -> cfg_dir
+                   (Nothing, False,True) -> dfl_dir
+                   (Just xmh, _  ,  _ ) -> xmh
+     return out
+     
 
 -- Now run xmonad with all the defaults we set up.
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 -- main = xmonad defaults
-main = xmonad =<< xmobar  defaults 
+main = do --  Location of the configuration
+          xmhome <- xmonad_home
+          putEnv $ "XMONAD_HOME=" ++ xmhome
+          xmonad =<< xmobar  ( defaults  xmhome)
 

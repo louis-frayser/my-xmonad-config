@@ -1,7 +1,8 @@
 #! /bin/sh
 
-XMHOME=$HOME/.xmonad
-RUNDIR=$XMHOME/run
+: {XMONAD_HOME:="$HOME/.config/xmonad"}
+
+RUNDIR=$XMONAD_HOME/run
 PIDFILE=$RUNDIR/xmonad.pid
 
 ppids () 
@@ -37,7 +38,7 @@ xhost local:
 #xmessage XMPID: $XMPID &
 
 ### Run if not already run
-[ "$pid" = $XMPID ] || exec $XMHOME/scripts/spawnOnce.sh
+[ "$pid" = "$XMPID" ] || exec "$XMONAD_HOME/scripts/spawnOnce.sh"
 
 
 ### Verify the necesary auxilary packages are installed.
@@ -48,6 +49,6 @@ do echo -n "$x: "
    if which $x
    then echo "OK."
    else echo "Missing!"
-	xmessage "Package $x is missing"
+	xmessage "Package $x is missing" &
    fi
 done

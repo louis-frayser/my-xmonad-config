@@ -1,4 +1,5 @@
 #! /bin/bash
+# NOTE:  The scrpt needs to return -- run long-running process in the background  
 export PATH=~/bin:/usr/lucho/bin:/usr/local/bin:/bin:$PATH
 xrdb -merge ~/.Xresources
 #xrandr.cmd
@@ -12,7 +13,9 @@ fbsetbg -t "/export/images/public/Wallpaper/Hot Chix/tatoo-lady.jpg"
 #xdaliclock -24 -cycle -bw 4 -transparent &
 # { terminator --profile pretty || konsole || mate-terminal;} &
 xscreensaver -no-splash&
-mountpoint ~/doc || xmessage -font "-*-lucida-*-r-*-*-24-*-*-*-*-*-*-*" "Mount the crypt! Press [Okay]!"
+
+## Warn user to mount the encrypted ~/doc directory
+mountpoint ~/doc || { xmessage -font "-*-lucida-*-r-*-*-24-*-*-*-*-*-*-*" "Mount the crypt! Press [Okay]!" & }
 
 {
 # https://wiki.parabola.nu/GNOME_Keyring#Use_Without_Gnome 2021-05-20
@@ -28,6 +31,6 @@ export GPG_AGENT_INFO
 export GNOME_KEYRING_CONTROL
 export GNOME_KEYRING_PID
 }
-google-chrome-stable&
+xdg-open "http://localhost:8008" &
 exit 0
 
