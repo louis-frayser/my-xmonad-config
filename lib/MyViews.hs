@@ -11,9 +11,11 @@ import Data.List(intercalate)
 import System.IO(IOMode(ReadMode),hGetLine,hGetContents,
                   hWaitForInput,withFile,hPutStrLn,stderr)
 import System.Directory(doesFileExist)
+import System.Posix.Env(getEnv)
 import Prelude hiding (putStrLn)
 import Control.Exception(catch)
 import Control.Concurrent(threadDelay)
+import Control.Monad(liftM)
 import XMonad
 import XMonad.Actions.OnScreen
 -- 
@@ -71,34 +73,36 @@ swapCurrentViews =
 helpWsCommand :: X ()
 helpWsCommand =  
    do -- verified pwd = $HOME
+      -- The config directory was saved in main
+      xmhome <- liftIO $ getEnv "XMONAD_HOME" >>= (\m -> return $ fromMaybe "" m)
       -- If we don't delay until fifo is created
       -- the shell will create a regular file named "fifo"
-      make_fifo
+      let fifodir = xmhome ++ "/run"
+      let fifo = fifodir ++ "/fifo"
+      make_fifo fifodir fifo
       -- menu_to_fifo: "xmesage>>fifo" blocks unless it runs
       --  after fifo is read from.
-      menu_to_fifo
-      result <- io get_result
+      menu_to_fifo fifo
+      result <- io (get_result fifo)
       trace $ "xmonad: Switching view to `" ++ result ++ "'"
       windows $ W.greedyView result
    where
-      fifodir=".xmonad/run"
-      fifo=fifodir ++ "/fifo"
-      make_fifo=
+      make_fifo fifodir fifo =
         do already <- io $ doesFileExist fifo
            if already then return ()
-                         else do _mkfifo
+                         else do _mkfifo fifodir fifo
                                  io $ threadDelay 1000000
-      _mkfifo =                            
+      _mkfifo fifodir fifo =                            
          spawn $ "fifodir="++fifodir ++"; fifo="++fifo++";\
                \[  -e $fifo ] || { \
                \[ -e $fifodir ] || mkdir -p $fifodir;\
                \mkfifo $fifo ;}"
-      menu_to_fifo :: X ()
-      menu_to_fifo = 
+      menu_to_fifo :: String -> X ()
+      menu_to_fifo fifo = 
            do let dmbuttons=unlines myWorkspaces
               spawn $ "echo '" ++ dmbuttons ++ "'| dmenu > " ++ fifo
       -- Polls fifo for a result
-      get_result = withFile fifo ReadMode getIt
+      get_result fifo = withFile fifo ReadMode getIt
 
      
 -- | Read result from menu of workspaces
