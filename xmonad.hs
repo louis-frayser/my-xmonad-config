@@ -8,15 +8,19 @@
 --
 import qualified Data.Map as M
 import Data.Monoid
+import Data.Maybe
 import System.Posix.Env
 import System.Exit
 
 import Graphics.X11.ExtraTypes.XF86 -- KBD Key names
 import XMonad ((-->), (=?), (|||), 
-                Choose(..), Full(..), Mirror(..), Tall(..),
+                Choose(..), Directories'(..),
+                Directories,
+                Full(..), Mirror(..), Tall(..),
                 X(..), XConfig(..),
-                button1, button2, button3, className, composeAll,
-                focus, doFloat, doIgnore, liftIO, liftX,
+                button1, button2, button3,
+                className, composeAll,
+                focus, doFloat, doIgnore, getDirectories,
                 mouseMoveWindow, mouseResizeWindow,
                 resource, spawn, windows, xmonad)
 import XMonad.Actions.OnScreen
@@ -28,7 +32,6 @@ import qualified XMonad.StackSet as W
 import XMonad.Util.SpawnOnce
 
 import MyController (myKeys, myModMask, myWorkspaces)
-import Env
 
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
@@ -201,13 +204,14 @@ main :: IO ()
 {-  Originally: main = xmonad defaults
 --
 -- Get the location of the configuration directory
--- add it to the defaults (and to environment)
--- start xmonad, xmobar adn the defaults.
+-- add it to the defaults (and to environment for scripts)
+-- start xmonad from xmobar with the defaults.
 -}
 main 
  = do
-   xmhome  <- xmonad_home
--- xmhome <- liftX (getXMonadHome :: X String)
-   putEnv $ "XMONAD_HOME=" ++ xmhome
-   xmobar (defaults xmhome) >>= xmonad
--- xmonad =<< xmobar (defaults xmhome)
+  dirs <- getDirectories
+  putEnv("XMONAD_CFG_DIR=" ++ cfgDir dirs)
+  putEnv("XMONAD_DATA_DIR=" ++ cfgDir dirs)
+  putEnv("XMONAD_CACHE_DIR=" ++ cfgDir dirs)
+  xmobar (defaults (cfgDir dirs)) >>= xmonad
+
