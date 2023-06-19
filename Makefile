@@ -3,9 +3,9 @@ OBJS=*.o lib/*.o *.hi lib/*.hi
 BAK=*~ */*~
 all: check
 
-check:
+check: ${TARGET}
 	@clear 
-	ghc -ilib -o ${TARGET} xmonad
+	ghc -ilib -o ${TARGET} xmonad.hs
 	pidof xmessage && killall xmessage; true
 	xmonad --recompile
 clean:
