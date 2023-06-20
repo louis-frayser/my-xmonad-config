@@ -29,12 +29,12 @@ xspawn cmd = spawn ("PATH=/usr/lucho/bin:$PATH;" ++ cmd)
 -- | PulseAudio mixer controler
 pmixer :: MixArg -> X ()
 pmixer cmd =
-   let prefix = "amixer -D pulse sset Master,0"
+   let prefix = "amixer -D pulse sset Master,0" --VV Non Pulse Below
        params =
-          case cmd of
-             Up -> "2000- unmute"
-             Down -> "2000- unmute"
-             ToggleMute -> "0 toggle"
+	  case cmd of
+	     Up -> "2000+ unmute"
+	     Down -> "2000- unmute"
+	     ToggleMute -> "0 toggle"
     in spawn $ prefix ++ " " ++ params
 
 -- | Alsa Mixer
@@ -43,14 +43,14 @@ data MixArg
    | Down
    | ToggleMute
 
-mixer :: MixArg -> X ()
+mixer :: MixArg -> X () -- See above for Pulse
 mixer cmd =
    let cstr =
-          "amixer sset " ++
-          case cmd of
-             Up -> " Master 100%; " ++ "amixer sset PCM playback 20+"
-             Down -> "PCM playback 20-"
-             ToggleMute -> "Master toggle"
+	  "amixer sset Master" ++ " " ++
+	  case cmd of
+	     Up  -> "2000+ unmute"
+	     Down -> "2000- unmute"
+	     ToggleMute -> "Master toggle"
     in spawn cstr
 
 -- | default mixer
