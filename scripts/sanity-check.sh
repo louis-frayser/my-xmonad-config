@@ -1,8 +1,8 @@
 #! /bin/sh
 
-: {XMONAD_HOME:="$HOME/.config/xmonad"}
+: {XMONAD_CONFIG_DIR:="$HOME/.config/xmonad"}
 
-RUNDIR=$XMONAD_HOME/run
+RUNDIR=$XMONAD_CONFIG_DIR/run
 PIDFILE=$RUNDIR/xmonad.pid
 
 ppids () 
@@ -38,7 +38,7 @@ xhost local:
 #xmessage XMPID: $XMPID &
 
 ### Run if not already run
-[ "$pid" = "$XMPID" ] || exec "$XMONAD_HOME/scripts/spawnOnce.sh"
+[ "$pid" = "$XMPID" ] || exec "$XMONAD_CONFIG_DIR/scripts/spawnOnce.sh"
 
 
 ### Verify the necesary auxilary packages are installed.
