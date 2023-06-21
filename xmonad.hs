@@ -21,7 +21,7 @@ import XMonad ((-->), (=?), (|||),
                 button1, button2, button3,
                 className, composeAll,
                 focus, doFloat, doIgnore, getDirectories,
-                mouseMoveWindow, mouseResizeWindow,
+                liftIO, mouseMoveWindow, mouseResizeWindow,
                 resource, spawn, windows, xmonad)
 import XMonad.Actions.OnScreen
 import XMonad.Hooks.DynamicLog
@@ -154,11 +154,17 @@ myLogHook = return ()
 -- By default, do nothing.
 -- myStartupHook = return ()
 -- Original was spawnOnce
+{-
 myStartupHook :: String -> X ()
-myStartupHook configDir =
+   myStartupHook configDir =
    fst (spawn :: String -> X (), spawnOnce) $
    configDir ++ "/scripts/sanity-check.sh"
+ -}
 
+myStartupHook ::  X ()
+myStartupHook =
+  do dirs <- liftIO getDirectories
+     (spawn :: String -> X ()) $ (cfgDir dirs)  ++ "/scripts/sanity-check.sh"
 ------------------------------------------------------------------------
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -193,7 +199,7 @@ defaults configDir =
          , manageHook = myManageHook
          , handleEventHook = myEventHook
          , logHook = myLogHook
-         , startupHook = myStartupHook configDir
+         , startupHook = myStartupHook
          }
 
 
@@ -210,8 +216,9 @@ main :: IO ()
 main 
  = do
   dirs <- getDirectories
-  putEnv("XMONAD_CFG_DIR=" ++ cfgDir dirs)
-  putEnv("XMONAD_DATA_DIR=" ++ cfgDir dirs)
-  putEnv("XMONAD_CACHE_DIR=" ++ cfgDir dirs)
+  putEnv("XMONAD_CONFIG_DIR=" ++ cfgDir dirs)
+  putEnv("XMONAD_DATA_DIR=" ++ dataDir dirs)
+  putEnv("XMONAD_CACHE_DIR=" ++ cacheDir dirs)
+  spawn "env |grep XMONAD 1>&2"
   xmobar (defaults (cfgDir dirs)) >>= xmonad
 
