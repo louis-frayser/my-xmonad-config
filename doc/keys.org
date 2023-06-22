@@ -1,11 +1,12 @@
 ** Workspaces
-m-a A/V+
-[1-9-=xz]
-F{1,5,11}
-Vol+,-,Mute
-Fn+{Email, Search, Home, Calc}
-
-** Reserved 
+*** ModKey=Alt
+  |m-a        |   A/V+                 |
+  |[1-9-=xz]  |Go to ws #N             |
+  |m-F{1,.11} |Go to ws pair (#N,N+10) |
+  |Vol+,-,Mute|Conrols sound           |
+  |Fn+{Email, | Search, Home, Calc}    |
+   
+** Reserved ModKey +
   +---------+----------------------+----------+
   | b       | toggle grun          |          |
   | c       |                      | kill win |
@@ -21,10 +22,14 @@ Fn+{Email, Search, Home, Calc}
   | w       |                      |          |
   | /,?     | Select ws from menu  | Help     |
   | .,,     | Inc/Dec # main wndws |          |
+  |  F5     | Select Wrk spcs  5&15|          |
+  |  S5     | Move window to ws  5 |          |
+  |  5      | Select ws 5          |          |
   |---------+----------------------+----------|
   | Sleep   | sleep                |          |
-  |         |                      |          |
-
+  | S-F5    | Swap Heads LtoR      |          |
+  +---------+----------------------+----------+
 ** Free
-mod-{d,f,g,i,o,s,u,v,y}
+mod-{d*,f,g,i,o,s,u,v,y}
+*d calls debug function (when I'm testing)
 []\
