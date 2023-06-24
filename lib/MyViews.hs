@@ -101,7 +101,8 @@ helpWsCommand
       -- verified pwd = $HOME
       -- The config directory was saved in main
  = do
-  xmhome <- liftIO $ getEnv "XMONAD_CONFIG_DIR" >>= (\m -> return $ fromMaybe "" m)
+  xmhome <-
+    liftIO $ getEnv "XMONAD_CONFIG_DIR" >>= (\m -> return $ fromMaybe "" m)
       -- If we don't delay until fifo is created
       -- the shell will create a regular file named "fifo"
   let fifodir = xmhome ++ "/run"

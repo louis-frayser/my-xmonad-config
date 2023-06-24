@@ -1,23 +1,23 @@
 module MyKbFunctions
-   ( MixArg(..)
-   , alertRegularKey
-   , alertShiftedKey
-   , amixer
-   , lockScreen
-   , runEmacs
-   , screenshot
-   , showkey
-   , switchSession
-   , xspawn
-   ) where
+  ( MixArg(..)
+  , alertRegularKey
+  , alertShiftedKey
+  , amixer
+  , lockScreen
+  , runEmacs
+  , screenshot
+  , showkey
+  , switchSession
+  , xspawn
+  ) where
 
 import System.IO (hPutStrLn, stderr)
 import XMonad (X, io, spawn)
 
 data Audio
-   = Pulse
-   | Alsa
-   | Jack
+  = Pulse
+  | Alsa
+  | Jack
 
 -- | Local configurations
 audio = Alsa
@@ -29,36 +29,37 @@ xspawn cmd = spawn ("PATH=/usr/lucho/bin:$PATH;" ++ cmd)
 -- | PulseAudio mixer controler
 pmixer :: MixArg -> X ()
 pmixer cmd =
-   let prefix = "amixer -D pulse sset Master,0" --VV Non Pulse Below
-       params =
-	  case cmd of
-	     Up -> "2000+ unmute"
-	     Down -> "2000- unmute"
-	     ToggleMute -> "0 toggle"
-    in spawn $ prefix ++ " " ++ params
+  let prefix = "amixer -D pulse sset Master,0" --VV Non Pulse Below
+      params =
+        case cmd of
+          Up -> "2000+ unmute"
+          Down -> "2000- unmute"
+          ToggleMute -> "0 toggle"
+   in spawn $ prefix ++ " " ++ params
 
 -- | Alsa Mixer
 data MixArg
-   = Up
-   | Down
-   | ToggleMute
+  = Up
+  | Down
+  | ToggleMute
 
 mixer :: MixArg -> X () -- See above for Pulse
 mixer cmd =
-   let cstr =
-	  "amixer sset Master" ++ " " ++
-	  case cmd of
-	     Up  -> "2000+ unmute"
-	     Down -> "2000- unmute"
-	     ToggleMute -> "Master toggle"
-    in spawn cstr
+  let cstr =
+        "amixer sset Master" ++
+        " " ++
+        case cmd of
+          Up -> "2000+ unmute"
+          Down -> "2000- unmute"
+          ToggleMute -> "Master toggle"
+   in spawn cstr
 
 -- | default mixer
 amixer :: MixArg -> X ()
 amixer =
-   case audio of
-      Alsa -> mixer
-      Pulse -> pmixer
+  case audio of
+    Alsa -> mixer
+    Pulse -> pmixer
 
 -- | Screen grab
 screenshot :: X ()
@@ -85,11 +86,11 @@ showkey k = io $ System.IO.hPutStrLn stderr $ "KEY: " ++ k
 -- | Display a message for Key and Shift-Key presses
 _keyAlert :: (Show k) => k -> Bool -> X ()
 _keyAlert k isShifted =
-   spawn $
-   "xmessage " ++
-   if isShifted
-      then "shifted "
-      else "" ++ show k
+  spawn $
+  "xmessage " ++
+  if isShifted
+    then "shifted "
+    else "" ++ show k
 
 alertRegularKey, alertShiftedKey :: Show k => k -> X ()
 alertRegularKey k = _keyAlert k False

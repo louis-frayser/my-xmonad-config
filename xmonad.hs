@@ -7,22 +7,41 @@
 -- Normally, you'd only override those defaults you care about.
 --
 import qualified Data.Map as M
-import Data.Monoid
 import Data.Maybe
-import System.Posix.Env
+import Data.Monoid
 import System.Exit
+import System.Posix.Env
 
 import Graphics.X11.ExtraTypes.XF86 -- KBD Key names
-import XMonad ((-->), (=?), (|||), 
-                Choose(..), Directories'(..),
-                Directories,
-                Full(..), Mirror(..), Tall(..),
-                X(..), XConfig(..),
-                button1, button2, button3,
-                className, composeAll,
-                focus, doFloat, doIgnore, getDirectories,
-                liftIO, mouseMoveWindow, mouseResizeWindow,
-                resource, spawn, windows, xmonad)
+import XMonad
+  ( Choose(..)
+  , Directories
+  , Directories'(..)
+  , Full(..)
+  , Mirror(..)
+  , Tall(..)
+  , X(..)
+  , XConfig(..)
+  , (-->)
+  , (=?)
+  , (|||)
+  , button1
+  , button2
+  , button3
+  , className
+  , composeAll
+  , doFloat
+  , doIgnore
+  , focus
+  , getDirectories
+  , liftIO
+  , mouseMoveWindow
+  , mouseResizeWindow
+  , resource
+  , spawn
+  , windows
+  , xmonad
+  )
 import XMonad.Actions.OnScreen
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
@@ -71,17 +90,17 @@ myFocusedBorderColor = "#ffff7f"
 -- Mouse bindings: default actions bound to mouse events
 --
 myMouseBindings (XConfig {XMonad.modMask = modm}) =
-   M.fromList $
+  M.fromList $
     -- mod-button1, Set the window to floating mode and move by dragging
-   [ ( (modm, button1)
-     , (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
+  [ ( (modm, button1)
+    , (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
     -- mod-button2, Raise the window to the top of the stack
-   , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
+  , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
     -- mod-button3, Set the window to floating mode and resize by dragging
-   , ( (modm, button3)
-     , (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster))
+  , ( (modm, button3)
+    , (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster))
     -- you may also bind events to the mouse scroll wheel (button4 and button5)
-   ]
+  ]
 
 ------------------------------------------------------------------------
 -- Layouts:
@@ -94,7 +113,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) =
 -- which denotes layout choice.
 --
 myLayout =
-   avoidStruts (tall ||| Mirror tall ||| tiled ||| Mirror tiled ||| Full)
+  avoidStruts (tall ||| Mirror tall ||| tiled ||| Mirror tiled ||| Full)
   where
     -- default tiling algorithm partitions the screen into two panes
     tiled = Tall nmaster delta ratio
@@ -121,12 +140,12 @@ myLayout =
 -- 'className' and 'resource' are used below.
 --
 myManageHook =
-   composeAll
-      [ className =? "MPlayer" --> doFloat
-      , className =? "Gimp" --> doFloat
-      , resource =? "desktop_window" --> doIgnore
-      , resource =? "kdesktop" --> doIgnore
-      ]
+  composeAll
+    [ className =? "MPlayer" --> doFloat
+    , className =? "Gimp" --> doFloat
+    , resource =? "desktop_window" --> doIgnore
+    , resource =? "kdesktop" --> doIgnore
+    ]
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -160,11 +179,11 @@ myStartupHook :: String -> X ()
    fst (spawn :: String -> X (), spawnOnce) $
    configDir ++ "/scripts/sanity-check.sh"
  -}
+myStartupHook :: X ()
+myStartupHook = do
+  dirs <- liftIO getDirectories
+  (spawn :: String -> X ()) $ (cfgDir dirs) ++ "/scripts/sanity-check.sh"
 
-myStartupHook ::  X ()
-myStartupHook =
-  do dirs <- liftIO getDirectories
-     (spawn :: String -> X ()) $ (cfgDir dirs)  ++ "/scripts/sanity-check.sh"
 ------------------------------------------------------------------------
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -179,29 +198,28 @@ type CT = Choose Tall
 type ML = XMonad.Layout.LayoutModifier.ModifiedLayout
 
 defaults ::
-      String -> XConfig (ML AvoidStruts (CT (Choose MT (CT (Choose MT Full)))))
+     String -> XConfig (ML AvoidStruts (CT (Choose MT (CT (Choose MT Full)))))
 defaults configDir =
-   docks
-      def
+  docks
+    def
       -- simple stuff
-         { terminal = myTerminal
-         , focusFollowsMouse = myFocusFollowsMouse
-         , borderWidth = myBorderWidth
-         , modMask = myModMask
-         , workspaces = myWorkspaces
-         , normalBorderColor = myNormalBorderColor
-         , focusedBorderColor = myFocusedBorderColor
+      { terminal = myTerminal
+      , focusFollowsMouse = myFocusFollowsMouse
+      , borderWidth = myBorderWidth
+      , modMask = myModMask
+      , workspaces = myWorkspaces
+      , normalBorderColor = myNormalBorderColor
+      , focusedBorderColor = myFocusedBorderColor
       -- key bindings
-         , keys = myKeys
-         , mouseBindings = myMouseBindings
+      , keys = myKeys
+      , mouseBindings = myMouseBindings
       -- hooks, layouts
-         , layoutHook = myLayout
-         , manageHook = myManageHook
-         , handleEventHook = myEventHook
-         , logHook = myLogHook
-         , startupHook = myStartupHook
-         }
-
+      , layoutHook = myLayout
+      , manageHook = myManageHook
+      , handleEventHook = myEventHook
+      , logHook = myLogHook
+      , startupHook = myStartupHook
+      }
 
 -- Now run xmonad with all the defaults we set up.
 -- Run xmonad with the settings you specify. No need to modify this.
@@ -213,12 +231,10 @@ main :: IO ()
 -- add it to the defaults (and to environment for scripts)
 -- start xmonad from xmobar with the defaults.
 -}
-main 
- = do
+main = do
   dirs <- getDirectories
-  putEnv("XMONAD_CONFIG_DIR=" ++ cfgDir dirs)
-  putEnv("XMONAD_DATA_DIR=" ++ dataDir dirs)
-  putEnv("XMONAD_CACHE_DIR=" ++ cacheDir dirs)
+  putEnv ("XMONAD_CONFIG_DIR=" ++ cfgDir dirs)
+  putEnv ("XMONAD_DATA_DIR=" ++ dataDir dirs)
+  putEnv ("XMONAD_CACHE_DIR=" ++ cacheDir dirs)
   spawn "env |grep XMONAD 1>&2"
   xmobar (defaults (cfgDir dirs)) >>= xmonad
-
