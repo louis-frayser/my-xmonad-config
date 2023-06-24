@@ -95,14 +95,16 @@ swapCurrentViews =
              S 0 -> view2 wx_id wc_id
              _ -> view2 wc_id wx_id)
 
+getXMHome :: IO String
+getXMHome =  
+  do dirs <- getDirectories
+     return $ cfgDir dirs
+
 -- | Help
 helpWsCommand :: X ()
 helpWsCommand
-      -- verified pwd = $HOME
-      -- The config directory was saved in main
  = do
-  xmhome <-
-    liftIO $ getEnv "XMONAD_CONFIG_DIR" >>= (\m -> return $ fromMaybe "" m)
+  xmhome <- liftIO getXMHome
       -- If we don't delay until fifo is created
       -- the shell will create a regular file named "fifo"
   let fifodir = xmhome ++ "/run"
@@ -162,9 +164,10 @@ getIt h = do
     delayusecs = round $ delaysecs * 1e6
     delaysecs = 0.5
 
-helpfile = "/export/home/frayser/.xmonad/doc/xmonad.cat"
 
 helpCommand :: X ()
-helpCommand = spawn $ "xmessage -file " ++ helpfile
+helpCommand = do xmhome <- liftIO getXMHome
+                 let helpfile = xmhome ++ "/export/home/frayser/.xmonad/doc/xmonad.cat"
+                 spawn $ "xmessage -file " ++ helpfile
 --
 -- vim: set expandtab tabstop=4 shiftwidth=4 ai:
