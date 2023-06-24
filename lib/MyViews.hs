@@ -1,12 +1,12 @@
 module MyViews
-   ( myWorkspacesL
-   , myWorkspacesR
-   , myWorkspaces
-   , swapCurrentViews
-   , view2
-   , helpCommand
-   , helpWsCommand
-   ) where
+  ( myWorkspacesL
+  , myWorkspacesR
+  , myWorkspaces
+  , swapCurrentViews
+  , view2
+  , helpCommand
+  , helpWsCommand
+  ) where
 
 import Control.Concurrent (threadDelay)
 import Control.Exception (catch)
@@ -21,14 +21,14 @@ import Data.List (intercalate)
 import Prelude hiding (putStrLn)
 import System.Directory (doesFileExist)
 import System.IO
-   ( IOMode(ReadMode)
-   , hGetContents
-   , hGetLine
-   , hPutStrLn
-   , hWaitForInput
-   , stderr
-   , withFile
-   )
+  ( IOMode(ReadMode)
+  , hGetContents
+  , hGetLine
+  , hPutStrLn
+  , hWaitForInput
+  , stderr
+  , withFile
+  )
 import System.Posix.Env (getEnv)
 import XMonad
 import XMonad.Actions.OnScreen
@@ -54,19 +54,19 @@ import Graphics.X11.ExtraTypes.XF86 -- KBD Key names
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
 myWorkspacesL =
-   [ "Tmp"
-   , "Admin"
-   , "Home"
-   , "PIM"
-   , "Practice"
-   , "Research"
-   , "Project"
-   , "Graphics"
-   , "A/V"
-   , "Scratch"
-   , "Eleven"
-   , "Twelve"
-   ]
+  [ "Tmp"
+  , "Admin"
+  , "Home"
+  , "PIM"
+  , "Practice"
+  , "Research"
+  , "Project"
+  , "Graphics"
+  , "A/V"
+  , "Scratch"
+  , "Eleven"
+  , "Twelve"
+  ]
 
 myWorkspacesR = map (++ "+") myWorkspacesL
 
@@ -75,9 +75,9 @@ myWorkspaces = myWorkspacesL ++ myWorkspacesR
 {- | Set the views (monitors) to the given workspaces -}
 view2 :: String -> String -> X ()
 view2 lft rht =
-   let mov2 cs ws = windows $ greedyViewOnScreen cs ws
-    in do mov2 0 lft
-          mov2 1 rht
+  let mov2 cs ws = windows $ greedyViewOnScreen cs ws
+   in do mov2 0 lft
+         mov2 1 rht
 
 -- screenToWorkspaceId :: W.Screen (W.Workspace i j k) k2 d -> WorkspaceId
 screenToWorkspaceId (W.Screen (W.Workspace wsId _ _) _sid _) = wsId
@@ -87,13 +87,13 @@ screenToWorkspaceId (W.Screen (W.Workspace wsId _ _) _sid _) = wsId
 -- The shift focus to the unfocused on
 swapCurrentViews :: X ()
 swapCurrentViews =
-   withWindowSet
-      (\ss ->
-          let W.Screen (W.Workspace wc_id _ _) sc_id _ = W.current ss
-              W.Screen (W.Workspace wx_id _ _) sid_x _ = head $ W.visible ss
-           in case sc_id of
-                 S 0 -> view2 wx_id wc_id
-                 _ -> view2 wc_id wx_id)
+  withWindowSet
+    (\ss ->
+       let W.Screen (W.Workspace wc_id _ _) sc_id _ = W.current ss
+           W.Screen (W.Workspace wx_id _ _) sid_x _ = head $ W.visible ss
+        in case sc_id of
+             S 0 -> view2 wx_id wc_id
+             _ -> view2 wc_id wx_id)
 
 -- | Help
 helpWsCommand :: X ()
@@ -101,63 +101,63 @@ helpWsCommand
       -- verified pwd = $HOME
       -- The config directory was saved in main
  = do
-   xmhome <- liftIO $ getEnv "XMONAD_HOME" >>= (\m -> return $ fromMaybe "" m)
+  xmhome <- liftIO $ getEnv "XMONAD_CONFIG_DIR" >>= (\m -> return $ fromMaybe "" m)
       -- If we don't delay until fifo is created
       -- the shell will create a regular file named "fifo"
-   let fifodir = xmhome ++ "/run"
-   let fifo = fifodir ++ "/fifo"
-   make_fifo fifodir fifo
+  let fifodir = xmhome ++ "/run"
+  let fifo = fifodir ++ "/fifo"
+  make_fifo fifodir fifo
       -- menu_to_fifo: "xmesage>>fifo" blocks unless it runs
       --  after fifo is read from.
-   menu_to_fifo fifo
-   result <- io (get_result fifo)
-   trace $ "xmonad: Switching view to `" ++ result ++ "'"
-   windows $ W.greedyView result
+  menu_to_fifo fifo
+  result <- io (get_result fifo)
+  trace $ "xmonad: Switching view to `" ++ result ++ "'"
+  windows $ W.greedyView result
   where
     make_fifo fifodir fifo = do
-       already <- io $ doesFileExist fifo
-       if already
-          then return ()
-          else do
-             _mkfifo fifodir fifo
-             io $ threadDelay 1000000
+      already <- io $ doesFileExist fifo
+      if already
+        then return ()
+        else do
+          _mkfifo fifodir fifo
+          io $ threadDelay 1000000
     _mkfifo fifodir fifo =
-       spawn $
-       "fifodir=" ++
-       fifodir ++
-       "; fifo=" ++
-       fifo ++
-       ";\
+      spawn $
+      "fifodir=" ++
+      fifodir ++
+      "; fifo=" ++
+      fifo ++
+      ";\
                \[  -e $fifo ] || { \
                \[ -e $fifodir ] || mkdir -p $fifodir;\
                \mkfifo $fifo ;}"
     menu_to_fifo :: String -> X ()
     menu_to_fifo fifo = do
-       let dmbuttons = unlines myWorkspaces
-       spawn $ "echo '" ++ dmbuttons ++ "'| dmenu > " ++ fifo
+      let dmbuttons = unlines myWorkspaces
+      spawn $ "echo '" ++ dmbuttons ++ "'| dmenu > " ++ fifo
       -- Polls fifo for a result
     get_result fifo = withFile fifo ReadMode getIt
 
 -- | Read result from menu of workspaces
 --  waitval is (-1) because a real value crashes 
 getIt h = do
-   catch tryit tryit_again
+  catch tryit tryit_again
   where
     tryit = do
-       trace "getIt..."
-       ready <- hWaitForInput h (-1)
-       if ready
-          then put_result
-          else trace "xmonad: WTF" >> return ""
+      trace "getIt..."
+      ready <- hWaitForInput h (-1)
+      if ready
+        then put_result
+        else trace "xmonad: WTF" >> return ""
     tryit_again e = do
-       hPutStrLn stderr $ "E :-" ++ show (e :: IOError)
-       trace "xmonad: Waiting for input..."
-       threadDelay delayusecs
-       getIt h
+      hPutStrLn stderr $ "E :-" ++ show (e :: IOError)
+      trace "xmonad: Waiting for input..."
+      threadDelay delayusecs
+      getIt h
     put_result = do
-       result <- hGetLine h
-       trace $ "xmonad: RESULT: `" ++ result ++ "'."
-       return result
+      result <- hGetLine h
+      trace $ "xmonad: RESULT: `" ++ result ++ "'."
+      return result
     delayusecs = round $ delaysecs * 1e6
     delaysecs = 0.5
 
