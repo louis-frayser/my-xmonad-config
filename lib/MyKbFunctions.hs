@@ -51,7 +51,7 @@ mixer cmd =
         case cmd of
           Up -> "2000+ unmute"
           Down -> "2000- unmute"
-          ToggleMute -> "Master toggle"
+          ToggleMute -> "toggle"
    in spawn cstr
 
 -- | default mixer
