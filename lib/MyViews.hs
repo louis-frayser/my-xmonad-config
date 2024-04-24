@@ -167,7 +167,7 @@ getIt h = do
 
 helpCommand :: X ()
 helpCommand = do xmhome <- liftIO getXMHome
-                 let helpfile = xmhome ++ "/export/home/frayser/.xmonad/doc/xmonad.cat"
+                 let helpfile = xmhome ++ "/doc/keys.org"
                  spawn $ "xmessage -file " ++ helpfile
 --
 -- vim: set expandtab tabstop=4 shiftwidth=4 ai:

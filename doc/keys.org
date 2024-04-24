@@ -1,12 +1,16 @@
 ** Workspaces
 *** ModKey=Alt
   |m-a        |   A/V+                 |
-  |[1-9-=xz]  |Go to ws #N             |
+  |[0..9-=xz] |Go to ws #N where 0=>10 |
+  |           |  z->Admin+,x->Graphics+| 
+  |           |  See: MyController.hs  | 
   |m-F{1,.11} |Go to ws pair (#N,N+10) |
   |Vol+,-,Mute|Conrols sound           |
   |Fn+{Email, | Search, Home, Calc}    |
    
 ** Reserved ModKey +
+  +---------+----------------------+----------+
+  | Key     | Unshifted            | Shifted  |
   +---------+----------------------+----------+
   | b       | toggle grun          |          |
   | c       |                      | kill win |
@@ -32,4 +36,3 @@
 ** Free
 mod-{d*,f,g,i,o,s,u,v,y}
 *d calls debug function (when I'm testing)
-[]\
