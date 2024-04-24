@@ -3,7 +3,7 @@
 export PATH=~/bin:/usr/lucho/bin:/usr/local/bin:/bin:$PATH
 xrdb -merge ~/.Xresources
 #xrandr.cmd
-#pulseaudio  -D
+pulseaudio  -D
 xsetroot -bg 'gray30' -fg '#c0c0b0'  -mod 16 16
 
 ## Background
@@ -23,7 +23,7 @@ mountpoint ~/doc || { xmessage -font "-*-lucida-*-r-*-*-24-*-*-*-*-*-*-*" "Mount
 source /etc/X11/xinit/xinitrc.d/?0-dbus
 
 # Start or connect Gnome-Keyring
-eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
+eval $(/usr/bin/gnome-keyring-daemon --start --daemonize --components=gpg,pkcs11,secrets,ssh)
 
 # You probably need to do this too:
 export SSH_AUTH_SOCK
