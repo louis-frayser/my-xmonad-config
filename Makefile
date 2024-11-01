@@ -1,3 +1,4 @@
+PATH=/usr/bin
 TARGET=xmonad-x86_64-linux
 OBJS=*.o lib/*.o *.hi lib/*.hi
 BAK=*~ */*~
