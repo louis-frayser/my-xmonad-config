@@ -9,30 +9,31 @@
   |Fn+{Email, | Search, Home, Calc}    |
    
 ** Reserved ModKey +
-  +---------+----------------------+----------+
-  | Key     | Unshifted            | Shifted  |
-  +---------+----------------------+----------+
-  | b       | toggle grun          |          |
-  | c       |                      | kill win |
-  | e,r,w   | east,middle,west     |          |
-  | h,l     | resizing             |          |
-  | j,k,TAB | cycle                | reverse  |
-  | m,CR    | go/creat main win    |          |
-  | n,SPC   | default/set Styles   |          |
-  | p       | grun                 | dmenu    |
-  | q,Q     | restart              | Quit     |
-  | r       |                      |          |
-  | t       | set default tiling   |          |
-  | w       |                      |          |
-  | /,?     | Select ws from menu  | Help     |
-  | .,,     | Inc/Dec # main wndws |          |
-  |  F5     | Select Wrk spcs  5&15|          |
-  |  S5     | Move window to ws  5 |          |
-  |  5      | Select ws 5          |          |
-  |---------+----------------------+----------|
-  | Sleep   | sleep                |          |
-  | S-F5    | Swap Heads LtoR      |          |
-  +---------+----------------------+----------+
+  +---------+-----------------------+----------+
+  | Key     | Unshifted             | Shifted  |
+  +---------+-----------------------+----------+
+  | b       | toggle grun           |          |
+  | c       |                       | kill win |
+  | e,r,w   | east,middle,west      |          |
+  | h,l     | resizing              |          |
+  | j,k,TAB | cycle                 | reverse  |
+  | m,CR    | go/creat main win     |          |
+  | n,SPC   | default/set Styles    |          |
+  | p       | grun                  | dmenu    |
+  | q,Q     | restart               | Quit     |
+  | r       |                       |          |
+  | t       | set default tiling    |          |
+  | w       |                       |          |
+  | /,?     | Select ws from menu   | Help     |
+  | .,,     | Inc/Dec # main wndws  |          |
+  |  F5     | Select Wrk spcs  5&15 |          |
+  |  S5     | Move window to ws  5  |          |
+  |  5      | Select ws 5           |          |
+  |---------+-----------------------+----------|
+  | Sleep   | sleep                 |          |
+  | S-F5    | Swap Heads LtoR       |          |
+  | S-F6    | Run $PATH../xdpytoggle|          |
+  +---------+----------------------+-----------+
 ** Free
 mod-{d*,f,g,i,o,s,u,v,y}
 *d calls debug function (when I'm testing)

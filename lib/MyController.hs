@@ -54,6 +54,7 @@ import MyViews
   , myWorkspacesL
   , myWorkspacesR
   , swapCurrentViews
+  , xdpyToggle
   , view2
   )
 
@@ -195,6 +196,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
   ] ++
       -- | Swap LtoR visible workspaces
   [ ((modm .|. shiftMask, xK_F5), swapCurrentViews)
+  ,
+    ((modm .|. shiftMask, xK_F6), xdpyToggle)
       -- | Swap Sessions
   , ((modm, xK_Super_L), switchSession)
   ] ++

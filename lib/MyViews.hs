@@ -3,6 +3,7 @@ module MyViews
   , myWorkspacesR
   , myWorkspaces
   , swapCurrentViews
+  , xdpyToggle
   , view2
   , helpCommand
   , helpWsCommand
@@ -94,6 +95,12 @@ swapCurrentViews =
         in case sc_id of
              S 0 -> view2 wx_id wc_id
              _ -> view2 wc_id wx_id)
+
+-- | Call extenal script to swap dsplay mode
+xdpyToggle :: X ()
+xdpyToggle = 
+  do  spawn "xdpytoggle"
+      return ()
 
 getXMHome :: IO String
 getXMHome =  
