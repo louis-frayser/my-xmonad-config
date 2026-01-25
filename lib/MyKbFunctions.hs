@@ -18,6 +18,7 @@ data Audio
   = Pulse
   | Alsa
   | Jack
+  | Pipewire
 
 -- | Local configurations
 audio = Alsa
