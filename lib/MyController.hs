@@ -85,6 +85,8 @@ debugKey k =
     (spawn $ "xmessage regular key: " ++ show k)
     (spawn $ "xmessage shifted: " ++ show k)
 
+browseHTTP url = spawn ("google-chrome-stable --new-window " ++ url)
+
 {-- | keyWithWS k ws
 --   Add standard actions for k, shift-k for workspacs
 keyWithWS k ws =
@@ -175,6 +177,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
   , ((0, xF86XK_Search), view2 "PIM" "A/V")
   , ((0, xF86XK_Tools), view2 "Practice" "Project")
   , ((0, xF86XK_Calculator), view2 "Project" "Research")
+  , ((modm, xF86XK_HomePage), browseHTTP "http://localhost")
   , ((modm, xK_F1), view2 "Admin" "Admin+")
   , ((modm, xK_F2), view2 "Home" "Home+")
   , ((modm, xK_F3), view2 "PIM" "PIM+")
