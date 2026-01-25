@@ -10,4 +10,3 @@ if xrandr -q |grep 3840
 then mirror.sh
 else default.sh
 fi
-
