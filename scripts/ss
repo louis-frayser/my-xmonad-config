@@ -1,0 +1,16 @@
+#! /bin/sh
+PATH=~/.xmonad/scripts:/bin
+
+lbody(){
+  for dtno in 4 6 7 11 12
+  do case dtno in 11) dt=10;;
+                  *) dt=$dtno;;
+     esac
+     xmonadctl -a goto $dt
+    sleep $((20 * 2))
+  done
+ }
+
+while :
+do lbody
+done

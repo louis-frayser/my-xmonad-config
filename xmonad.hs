@@ -47,10 +47,12 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.Reflect
-import qualified XMonad.StackSet as W
 import XMonad.Util.SpawnOnce
+import XMonad.Hooks.ServerMode
+import qualified XMonad.StackSet as W
 
 import MyController (myKeys, myModMask, myWorkspaces)
+import MyViews (view2, viewDesktop)
 
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
@@ -155,8 +157,7 @@ myManageHook =
 -- return (All True) if the default handler is to be run afterwards. To
 -- combine event hooks use mappend or mconcat from Data.Monoid.
 --
-myEventHook = mempty
-
+myEventHook = serverModeEventHookF "goto" (viewDesktop) -- ws: mempty
 ------------------------------------------------------------------------
 -- Status bars and logging
 -- Perform an arbitrary action on each internal state change or X event.
