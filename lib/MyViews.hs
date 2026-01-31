@@ -122,7 +122,8 @@ getXMHome =
   do dirs <- getDirectories
      return $ cfgDir dirs
 
--- | Help
+-- | Help -- creates a menu of desktop names using dmenu, showing names a top of screen
+--           User can then select (and will be swithed to) a desktop.
 helpWsCommand :: X ()
 helpWsCommand
  = do
