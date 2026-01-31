@@ -2,9 +2,11 @@ module MyViews
   ( myWorkspacesL
   , myWorkspacesR
   , myWorkspaces
+  , myDesktops
   , swapCurrentViews
   , xdpyToggle
   , view2
+  , viewDesktop
   , helpCommand
   , helpWsCommand
   ) where
@@ -40,7 +42,6 @@ import qualified Data.Map as M
 import qualified XMonad.StackSet as W
 
 import Data.Maybe
-
 --
 import Graphics.X11.ExtraTypes.XF86 -- KBD Key names
 
@@ -61,7 +62,7 @@ myWorkspacesL =
   , "PIM"
   , "Practice"
   , "Research"
-  , "Project"
+  , "Project"  -- 10th saved in !! 0
   , "Graphics"
   , "A/V"
   , "Scratch"
@@ -72,6 +73,8 @@ myWorkspacesL =
 myWorkspacesR = map (++ "+") myWorkspacesL
 
 myWorkspaces = myWorkspacesL ++ myWorkspacesR
+myDesktops = zip myWorkspacesL myWorkspacesR -- pairs of WS
+desktop n = myDesktops !! (n - 1)  -- select a desktop
 
 {- | Set the views (monitors) to the given workspaces -}
 view2 :: String -> String -> X ()
@@ -79,6 +82,15 @@ view2 lft rht =
   let mov2 cs ws = windows $ greedyViewOnScreen cs ws
    in do mov2 0 lft
          mov2 1 rht
+
+viewDesktop :: String -> X ()
+viewDesktop numStr = view2 x y
+    where (x,y) = myDesktops !! num 
+          num = f (read numStr::Int)
+          f x
+              | x == 10 = 0
+              | x > 10 = x - 1
+              | otherwise = x
 
 -- screenToWorkspaceId :: W.Screen (W.Workspace i j k) k2 d -> WorkspaceId
 screenToWorkspaceId (W.Screen (W.Workspace wsId _ _) _sid _) = wsId
@@ -90,11 +102,14 @@ swapCurrentViews :: X ()
 swapCurrentViews =
   withWindowSet
     (\ss ->
-       let W.Screen (W.Workspace wc_id _ _) sc_id _ = W.current ss
-           W.Screen (W.Workspace wx_id _ _) sid_x _ = head $ W.visible ss
-        in case sc_id of
-             S 0 -> view2 wx_id wc_id
-             _ -> view2 wc_id wx_id)
+        let W.Screen (W.Workspace wc_id _ _) sc_id _ = W.current ss
+            W.Screen (W.Workspace wx_id _ _) sid_x _ = case (W.visible ss) 
+                                                         of (x:xs) -> x
+                                                            [ ]    -> W.current ss  
+        in case (W.visible ss,sc_id) of
+             ([], _  ) -> return ()
+             (_ , S 0) -> view2 wx_id wc_id
+             (_ ,_   ) -> view2 wc_id wx_id)
 
 -- | Call extenal script to swap dsplay mode
 xdpyToggle :: X ()
