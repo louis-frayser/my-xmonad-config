@@ -14,6 +14,7 @@ module MyViews
 import Control.Concurrent (threadDelay)
 import Control.Exception (catch)
 import Control.Monad (liftM)
+import Text.Printf
 
 {- | View & view-controller definitions that must be shared between xmonad and config modules
  -}
@@ -35,6 +36,7 @@ import System.IO
 import System.Posix.Env (getEnv)
 import XMonad
 import XMonad.Actions.OnScreen
+import XMonad.Actions.Navigation2D
 
 import qualified Data.Map as M
 
@@ -82,16 +84,22 @@ view2 lft rht =
   let mov2 cs ws = windows $ greedyViewOnScreen cs ws
    in do mov2 0 lft
          mov2 1 rht
-
+-- --------------------------------------------------------------
 viewDesktop :: String -> X ()
-viewDesktop numStr = view2 x y
+viewDesktop indicator =
+  case indicator of
+    "left"  ->  windowGo L False
+    "right" ->  windowGo R False
+    _       ->  viewDesktop' indicator
+    
+viewDesktop' numStr = view2 x y
     where (x,y) = myDesktops !! num 
           num = f (read numStr::Int)
           f x
               | x == 10 = 0
               | x > 10 = x - 1
               | otherwise = x
-
+-- --------------------------------------------------------------
 -- screenToWorkspaceId :: W.Screen (W.Workspace i j k) k2 d -> WorkspaceId
 screenToWorkspaceId (W.Screen (W.Workspace wsId _ _) _sid _) = wsId
 

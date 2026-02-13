@@ -12,6 +12,7 @@ module MyKbFunctions
   ) where
 
 import System.IO (hPutStrLn, stderr)
+import Control.Monad.IO.Class (liftIO)
 import XMonad (X, io, spawn)
 
 data Audio
@@ -29,6 +30,7 @@ xspawn cmd = spawn ("PATH=/usr/lucho/bin:$PATH;" ++ cmd)
 
 -- | PulseAudio mixer controler
 pmixer :: MixArg -> X ()
+{-
 pmixer cmd =
   let prefix = "amixer -D pulse sset Master,0" --VV Non Pulse Below
       params =
@@ -37,6 +39,18 @@ pmixer cmd =
           Down -> "2000- unmute"
           ToggleMute -> "0 toggle"
    in spawn $ prefix ++ " " ++ params
+ -}
+
+pmixer cmd =
+  let sink = "0"
+      unmute = "pactl set-sink-mute 0 0"
+      cmdline =
+        case cmd of
+            Up         -> unmute ++ "; pactl -- set-sink-volume " ++ sink ++ " +10%"
+            Down       -> unmute ++ "; pactl -- set-sink-volume " ++ sink ++ " -10%"
+            ToggleMute -> "pactl set-sink-mute " ++ sink ++ " toggle"
+   in do liftIO $ putStrLn cmdline
+         spawn cmdline
 
 -- | Alsa Mixer
 data MixArg
