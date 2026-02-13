@@ -7,3 +7,6 @@ xmonad.state
 *.out
 run
 *.swp
+.\#*
+\#*
+typescript
