@@ -8,7 +8,7 @@ check: ${TARGET}
 	@clear 
 	ghc -ilib -o ${TARGET} xmonad.hs
 	pidof xmessage && killall xmessage; true
-	xmonad --recompile
+	./${TARGET} --recompile
 clean:
 	@for x in ${BAK} *.out ${OBJS} ; \
 	   do if [ -e $$x ] ; then rm -v  $$x ; fi; done
