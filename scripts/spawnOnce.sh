@@ -1,5 +1,7 @@
 #! /bin/bash
 # NOTE:  The scrpt needs to return -- run long-running process in the background  
+PATH=$HOME/.xmonad/scripts:$PATH
+xmonadctl -a goto 1
 set -x
 export PATH=~/bin:/usr/lucho/bin:/usr/local/bin:/bin:$PATH
 xrdb -merge ~/.Xresources
