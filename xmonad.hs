@@ -11,7 +11,6 @@ import Data.Maybe
 import Data.Monoid
 import System.Exit
 import System.Posix.Env
-
 import Graphics.X11.ExtraTypes.XF86 -- KBD Key names
 import XMonad
   ( Choose(..)
@@ -44,7 +43,9 @@ import XMonad
   )
 import XMonad.Actions.OnScreen
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.Reflect
 import XMonad.Util.SpawnOnce
@@ -142,11 +143,15 @@ myLayout =
 -- 'className' and 'resource' are used below.
 --
 myManageHook =
-  composeAll
-    [ className =? "MPlayer" --> doFloat
-    , className =? "Gimp" --> doFloat
-    , resource =? "desktop_window" --> doIgnore
-    , resource =? "kdesktop" --> doIgnore
+  -- composeAll
+  composeOne
+    [ className =? "MPlayer"  -?> doFloat
+    , className =? "Gimp"     -?> doFloat
+    , className =? "Xmessage" -?> doFloat
+    , className =? "XDaliClock" -?> doFloat
+
+    , resource =? "desktop_window" -?> doIgnore
+    , resource =? "kdesktop" -?> doIgnore
     ]
 
 ------------------------------------------------------------------------
@@ -157,7 +162,11 @@ myManageHook =
 -- return (All True) if the default handler is to be run afterwards. To
 -- combine event hooks use mappend or mconcat from Data.Monoid.
 --
-myEventHook = serverModeEventHookF "goto" (viewDesktop) -- ws: mempty
+myEventHook =
+  serverModeEventHookF "goto" viewDesktop --  desktop # or left|right (for monitor)
+  -- <>  serverModeEventHookF "atomName" dispatchFunction
+  -- <>  serverModeEventHookF "atomName" dispatchFunction
+  
 ------------------------------------------------------------------------
 -- Status bars and logging
 -- Perform an arbitrary action on each internal state change or X event.
@@ -201,8 +210,8 @@ type ML = XMonad.Layout.LayoutModifier.ModifiedLayout
 defaults ::
      String -> XConfig (ML AvoidStruts (CT (Choose MT (CT (Choose MT Full)))))
 defaults configDir =
-  docks
-    def
+  docks $
+    ewmh def
       -- simple stuff
       { terminal = myTerminal
       , focusFollowsMouse = myFocusFollowsMouse
