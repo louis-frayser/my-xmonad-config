@@ -27,6 +27,7 @@ import XMonad
   , windows
   , withFocused
   )
+import XMonad.Actions.Submap
 import XMonad.Hooks.ManageDocks
 import XMonad.Util.SpawnOnce
 
@@ -100,6 +101,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
   , ((modm, xK_p), spawn "dmenu_run")
     -- launch gmrun
   , ((modm .|. shiftMask, xK_p), spawn "grun")
+    --  Launch slide show
+  , ((modm,    xK_y), spawn "$HOME/.xmonad/scripts/ss1")
+  , ((modm .|. shiftMask, xK_y), spawn "killall -USR1 ss1")
     -- close focused window
   , ((modm .|. shiftMask, xK_c), kill)
      -- Rotate through the available layout algorithms
@@ -144,6 +148,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
     -- Restart xmonad
   , ((modm, xK_q), spawn "xmonad --recompile; xmonad --restart")
   ] ++
+
     --
     -- mod-[0..9], Switch to workspace N
     -- mod-shift-[0..9], Move client to workspace N
@@ -177,6 +182,14 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
   , ((0, xF86XK_Search), view2 "PIM" "A/V")
   , ((0, xF86XK_Tools), view2 "Practice" "Project")
   , ((0, xF86XK_Calculator), view2 "Project" "Research")
+
+
+  , ((0, xK_Multi_key), submap . M.fromList $
+      [ ((0, xK_1), spawn "vidmenu") 
+      , ((0, xK_2), spawn "echo 'Multi+2'")
+      , ((0, xK_3), spawn "beep; echo 'Multi+3'")
+      ])
+
   , ((modm, xF86XK_HomePage), browseHTTP "http://localhost")
   , ((modm, xK_F1), view2 "Admin" "Admin+")
   , ((modm, xK_F2), view2 "Home" "Home+")
@@ -217,4 +230,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
 -}
   ] ++
   debugKey xK_u
+
+
 -- vim: set expandtab tabstop=4 shiftwidth=4 ai:
