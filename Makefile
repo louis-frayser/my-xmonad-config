@@ -19,11 +19,11 @@ clean:
 	@for x in ${BAK} *.out ${OBJS} ; \
 	   do if [ -e $$x ] ; then rm -v  $$x ; fi; done
 
-wc:
-	@find . -name "*.hs" -o -name "Makefile" | xargs wc -l
-
 install:
 	cp -pv ${TARGET} ${HOME}/.local/bin/xmonad
 
 clobber: clean
 	@find . -name "*.swp" -exec rm -v "{}" \;
+
+wc:
+	@find . \( -name test -o -name scripts \) -prune -o -name "*.hs" -exec wc -l {} + |sort -n
