@@ -1,6 +1,9 @@
 {-| Just to be clear what's being imported whats being declared -}
 module KeyDefs
   ( xK_0
+  , xK_1
+  , xK_2
+  , xK_3
   , xK_9
   , xK_F
   , xK_F1
@@ -35,16 +38,18 @@ module KeyDefs
   , xK_minus
   , xK_n
   , xK_oslash
-  , xK_p
   , xK_period
+  , xK_p
   , xK_q
   , xK_r
+  , xK_s
   , xK_slash
   , xK_space
-  , xK_x
   , xK_t
   , xK_u
   , xK_w
+  , xK_x
+  , xK_y
   , xK_z
   , controlMask
   , mod1Mask
@@ -52,9 +57,11 @@ module KeyDefs
   , shiftMask
   , modmR
   , modmL
+  , xK_Multi_key
   ) where
 
 import XMonad
+import Graphics.X11.Types(xK_Multi_key)
 
 modmR = controlMask
 
