@@ -3,6 +3,7 @@ TARGET=xmonad-x86_64-linux
 OBJS=*.o lib/*.o *.hi lib/*.hi
 BAK=*~ */*~
 all: check restart
+	@echo done
 
 restart: ${TARGET}
 	./${TARGET} --restart
