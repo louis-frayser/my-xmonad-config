@@ -24,6 +24,7 @@
   | r       |                       |          |
   | t       | set default tiling    |          |
   | w       |                       |          |
+  | y       | run scripts/ss1       | stop ss1 |
   | /,?     | Select ws from menu   | Help     |
   | .,,     | Inc/Dec # main wndws  |          |
   |  F5     | Select Wrk spcs  5&15 |          |
@@ -35,5 +36,5 @@
   | S-F6    | Run $PATH../xdpytoggle|          |
   +---------+----------------------+-----------+
 ** Free
-mod-{d*,f,g,i,o,s,u,v,y}
+mod-{d*,f,g,i,o,s,u,v}
 *d calls debug function (when I'm testing)
