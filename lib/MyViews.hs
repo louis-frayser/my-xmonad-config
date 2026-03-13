@@ -88,8 +88,8 @@ view2 lft rht =
 viewDesktop :: String -> X ()
 viewDesktop indicator =
   case indicator of
-    "left"  ->  windowGo L False
-    "right" ->  windowGo R False
+    "left"  ->  screenGo L False
+    "right" ->  screenGo R False
     _       ->  viewDesktop' indicator
     
 viewDesktop' numStr = view2 x y
