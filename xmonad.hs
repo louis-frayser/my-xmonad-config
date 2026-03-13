@@ -24,18 +24,12 @@ import XMonad
   , (-->)
   , (=?)
   , (|||)
-  , button1
-  , button2
-  , button3
   , className
   , composeAll
   , doFloat
   , doIgnore
-  , focus
   , getDirectories
   , liftIO
-  , mouseMoveWindow
-  , mouseResizeWindow
   , resource
   , spawn
   , windows
@@ -52,7 +46,8 @@ import XMonad.Util.SpawnOnce
 import XMonad.Hooks.ServerMode
 import qualified XMonad.StackSet as W
 
-import MyController (myKeys, myModMask, myWorkspaces)
+import MyController (myKeys, myModMask, myMouseBindings,
+                      myWorkspaces)
 import MyViews (view2, viewDesktop)
 
 -- The preferred terminal program, which is used in a binding below and by
@@ -87,23 +82,9 @@ myNormalBorderColor = "#c0c0b0"
 myFocusedBorderColor = "#ffff7f"
 
 ------------------------------------------------------------------------
--- Key bindings. Add, modify or remove key bindings in the separate keys files
+-- Key & Mouse bindings. Add, modify or remove key bindings in the separate keys files
 -- lib/{MyKeys.hs,MyController.hs}
 ------------------------------------------------------------------------
--- Mouse bindings: default actions bound to mouse events
---
-myMouseBindings (XConfig {XMonad.modMask = modm}) =
-  M.fromList $
-    -- mod-button1, Set the window to floating mode and move by dragging
-  [ ( (modm, button1)
-    , (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
-    -- mod-button2, Raise the window to the top of the stack
-  , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
-    -- mod-button3, Set the window to floating mode and resize by dragging
-  , ( (modm, button3)
-    , (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster))
-    -- you may also bind events to the mouse scroll wheel (button4 and button5)
-  ]
 
 ------------------------------------------------------------------------
 -- Layouts:
