@@ -43,13 +43,13 @@ pmixer cmd =
 
 pmixer cmd =
   let sink = "0"
-      unmute = "pactl set-sink-mute 0 0"
+      unmute = "pactl set-sink-mute " ++ sink ++ " 0"
       cmdline =
         case cmd of
             Up         -> unmute ++ "; pactl -- set-sink-volume " ++ sink ++ " +10%"
             Down       -> unmute ++ "; pactl -- set-sink-volume " ++ sink ++ " -10%"
             ToggleMute -> "pactl set-sink-mute " ++ sink ++ " toggle"
-   in do liftIO $ putStrLn cmdline
+   in do liftIO $ appendFile "xmonad.log" ( "xmonad: " ++ cmdline )
          spawn cmdline
 
 -- | Alsa Mixer
