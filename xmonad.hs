@@ -88,7 +88,7 @@ myFocusedBorderColor = "#ffff7f"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings in the separate keys files
--- lib/MyKeys.hs
+-- lib/{MyKeys.hs,MyController.hs}
 ------------------------------------------------------------------------
 -- Mouse bindings: default actions bound to mouse events
 --
