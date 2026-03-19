@@ -35,6 +35,15 @@
   | S-F5    | Swap Heads LtoR       |          |
   | S-F6    | Run $PATH../xdpytoggle|          |
   +---------+----------------------+-----------+
+
+** CapsLock (MultiSelect) + Subkey
+  +---------+-----------------------+----------+
+  | Subkey  | Unshifted             | Shifted  |
+  +---------+-----------------------+----------+
+  | 1       | Runs vidmenu Popup    |          |
+  +---------+-----------------------+----------+
+
 ** Free
 mod-{d*,f,g,i,o,s,u,v}
 *d calls debug function (when I'm testing)
+Windows+Most-keys
