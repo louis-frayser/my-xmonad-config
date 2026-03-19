@@ -6,6 +6,7 @@ module KeyDefs
   , xK_3
   , xK_9
   , xK_F
+  , xK_Caps_Lock
   , xK_F1
   , xK_F2
   , xK_F3
