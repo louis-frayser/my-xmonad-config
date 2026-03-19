@@ -3,11 +3,11 @@ TARGET=xmonad-x86_64-linux
 OBJS=*.o lib/*.o *.hi lib/*.hi
 BAK=*~ */*~
 all: check restart
-	sleep 2
-	@echo done
 
 restart: ${TARGET}
 	./${TARGET} --restart
+	sleep 2
+	@echo done
 
 check: ${TARGET}
 	@clear 
