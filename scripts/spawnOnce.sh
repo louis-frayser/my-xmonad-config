@@ -6,6 +6,7 @@ set -x
 export PATH=~/bin:/usr/lucho/bin:/usr/local/bin:/bin:$PATH
 xrdb -merge ~/.Xresources
 setxkbmap -option "compose:lwin"
+setxkbmap -option "caps none"
 xsetroot -bg 'gray30' -fg '#c0c0b0'  -mod 16 16
 
 ## Background
@@ -76,6 +77,10 @@ launch_chrome(){
 
 xmonadctl -a goto 10
 drracket &
+# This hasn't workd yet but just in case it works someday
+# The one lamp has been reassined from caps lock to be a
+# numlok indicator
+{ sleep 2; xkbcomp -I$HOME/.xkb $HOME/.xkb/symbols/numlock-led $DISPLAY ;} &
 
 ## Gettign a weird background. Trying to overide
 fbsetbg -t "/export/images/public/Wallpaper/Hot Chix/tatoo-lady.jpg" &
