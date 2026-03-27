@@ -6,7 +6,7 @@ set -x
 export PATH=~/bin:/usr/lucho/bin:/usr/local/bin:/bin:$PATH
 xrdb -merge ~/.Xresources
 setxkbmap -option "compose:lwin"
-setxkbmap -option "caps none"
+setxkbmap -option "caps:none"
 xsetroot -bg 'gray30' -fg '#c0c0b0'  -mod 16 16
 
 ## Background

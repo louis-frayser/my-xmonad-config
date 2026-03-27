@@ -192,7 +192,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
 
 
   -- , ((0, xK_Multi_key), submap . M.fromList $
-  , ((0, xK_Caps_Lock), submap . M.fromList $
+  -- , ((0, xK_Caps_Lock), submap . M.fromList $
+  , ((0, xK_Hyper_L), submap . M.fromList $
       [ ((0, xK_1), spawn "vidmenu") 
       , ((0, xK_2), spawn "echo 'Multi+2'")
       , ((0, xK_3), spawn "beep; echo 'Multi+3'")
